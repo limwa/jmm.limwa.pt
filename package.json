@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uidotdev/usehooks": "^2.4.1",
     "dax-sh": "^0.40.0",
     "next": "14.2.2",
     "react": "^18",
