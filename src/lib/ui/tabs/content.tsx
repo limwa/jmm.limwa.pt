@@ -1,23 +1,12 @@
-"use client";
+import "client-only";
 
-import { useTabs } from "@/lib/hooks/tabs";
+import { useTabSelectionContext } from "./hooks/context";
 
-type TabContentProps =
-	| {
-			name: string;
-			children: React.ReactNode;
-	  }
-	| {
-            name?: undefined;
-			children: (name: string) => React.ReactNode;
-	  };
-
-export function TabContent(props: TabContentProps) {
-	const { selectedTab } = useTabs();
-
-	if ("name" in props) {
-		return selectedTab === props.name && props.children;
-	}
-
-	return props.children(selectedTab);
+export function TabContent({
+  builder,
+}: {
+  builder: (name: string) => React.ReactNode;
+}) {
+  const { selectedTab } = useTabSelectionContext();
+  return builder(selectedTab);
 }

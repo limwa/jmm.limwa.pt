@@ -1,7 +1,7 @@
-import { useTabs } from ".";
+import { useTabSelectionContext } from "./context";
 
 export function useTabSelector(name: string) {
-    const tabs = useTabs();
+    const tabs = useTabSelectionContext();
 
     return {
         selected: tabs.selectedTab === name,
