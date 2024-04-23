@@ -2,6 +2,7 @@
   "name": "better-jmm",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,10 +11,13 @@
   },
   "dependencies": {
     "@uidotdev/usehooks": "^2.4.1",
+    "clsx": "^2.1.0",
     "dax-sh": "^0.40.0",
     "next": "14.2.2",
     "react": "^18",
     "react-dom": "^18",
+    "shiki": "^1.3.0",
+    "tailwind-merge": "^2.3.0",
     "zx": "^8.0.1"
   },
   "devDependencies": {
