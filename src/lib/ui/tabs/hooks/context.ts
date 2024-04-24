@@ -8,11 +8,11 @@ type TabSelectionContextData = {
 export const TabSelectionContext = createContext<TabSelectionContextData | null>(null);
 
 export function useTabSelectionContext() {
-    const context = useContext(TabSelectionContext);
+    const tabSelection = useContext(TabSelectionContext);
 
-    if (!context) {
+    if (!tabSelection) {
         throw new Error("useTabSelectionContext must be used within a TabSelectionContext.Provider");
     }
 
-    return context;
+    return tabSelection;
 }
