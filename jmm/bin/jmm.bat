@@ -68,7 +68,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\jmm.jar;%APP_HOME%\lib\comp2023-lib-sources.jar;%APP_HOME%\lib\comp2023-lib.jar;%APP_HOME%\lib\comp2023-ollir-sources.jar;%APP_HOME%\lib\comp2023-ollir.jar;%APP_HOME%\lib\jasmin.jar;%APP_HOME%\lib\utils-sources.jar;%APP_HOME%\lib\utils.jar;%APP_HOME%\lib\antlr4-4.5.3.jar;%APP_HOME%\lib\junit-4.11.jar;%APP_HOME%\lib\gson-2.10.jar;%APP_HOME%\lib\hamcrest-core-1.3.jar
+set CLASSPATH=%APP_HOME%\lib\jmm.jar;%APP_HOME%\lib\jasmin.jar;%APP_HOME%\lib\utils-sources.jar;%APP_HOME%\lib\utils.jar;%APP_HOME%\lib\comp2023-lib-sources.jar;%APP_HOME%\lib\comp2023-lib.jar;%APP_HOME%\lib\comp2023-ollir-sources.jar;%APP_HOME%\lib\comp2023-ollir.jar;%APP_HOME%\lib\antlr4-4.5.3.jar;%APP_HOME%\lib\junit-4.11.jar;%APP_HOME%\lib\gson-2.10.jar;%APP_HOME%\lib\hamcrest-core-1.3.jar
 
 
 @rem Execute jmm

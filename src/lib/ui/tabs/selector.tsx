@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/lib/ui/utils/cn";
 import { useTabSelector } from "./hooks/selector";
 
 export function TabSelector({ name, readOnly, children }: { name: string, readOnly?: boolean, children?: React.ReactNode }) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Breakpoints } from "../config";
+import type { Breakpoints } from "../../server/config";
 import { useBreakpointsContext } from "./context";
 
 export function useBreakpoint(breakpoint: keyof Breakpoints) {

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { Breakpoints } from "../config";
+import type { Breakpoints } from "../../server/config";
 
 export const BreakpointsContext = createContext<Breakpoints | null>(null);
 
