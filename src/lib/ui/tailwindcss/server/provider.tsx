@@ -1,6 +1,6 @@
 import "server-only";
 
-import { BreakpointClientBridge } from "./client-bridge";
+import { BreakpointClientBridge } from "../client/bridge";
 import { resolveProjectConfig } from "./config";
 
 export async function BreakpointProvider({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { BreakpointProvider } from "@/lib/ui/tailwindcss/provider";
+import { BreakpointProvider } from "@/lib/ui/tailwindcss/server/provider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

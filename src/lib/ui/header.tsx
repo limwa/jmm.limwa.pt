@@ -1,4 +1,4 @@
-import { cn } from "../utils/cn";
+import { cn } from "./utils/cn";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 
 export function Header({ className }: { className?: string }) {
@@ -10,7 +10,7 @@ export function Header({ className }: { className?: string }) {
           className="ml-auto rounded-full outline-offset-1 outline-2 outline-teal-300 transition-colors hover:text-neutral-300 focus-visible:outline"
           href="https://github.com/limwa/jmm.limwa.pt"
         >
-          <SiGithub size={20} title={"Made with ❤️ by limwa"} />
+          <SiGithub size={20} title="Made with ❤️ by André Lima" />
         </a>
       </div>
     </header>
