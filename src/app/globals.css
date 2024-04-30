@@ -3,11 +3,9 @@
 @tailwind utilities;
 
 html .shiki {
-    @apply font-mono;
-    
     background-color: transparent !important;
 
-    & > * {
+    &, & > * {
         font-family: inherit;
     }
 }
