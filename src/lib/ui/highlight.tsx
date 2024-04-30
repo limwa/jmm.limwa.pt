@@ -24,6 +24,7 @@ export function Highlight({ initialCode }: { initialCode: string }) {
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}
+              data-enable-grammarly="false" 
               onChange={(e) => setCode(e.currentTarget.value)}
               onKeyDown={(e) => {
                 if (e.key == "Tab") {
