@@ -52,9 +52,8 @@ function useHighlighter() {
     : null;
 }
 
-export function useEditor(initialCode?: string) {
+export function useEditor(content: string) {
   const highlighter = useHighlighter();
-  const [content, setContent] = useState(initialCode ?? "");
 
   const html = useMemo(() => {
     if (!highlighter) return "";
@@ -67,6 +66,5 @@ export function useEditor(initialCode?: string) {
     isLoading: highlighter === null,
     html,
     content,
-    setContent,
   };
 }

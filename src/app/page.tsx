@@ -4,6 +4,9 @@ import { Header } from "@/lib/ui/header";
 import { TabSelector } from "@/lib/ui/tabs/selector";
 import { TabController } from "@/lib/ui/tabs/controller";
 import { useBreakpoint } from "@/lib/ui/tailwindcss/client/hooks/breakpoint";
+import { Highlight } from "@/lib/ui/highlight";
+import { useFormState } from "react-dom";
+import { compileJmm, type ProtocolSection } from "./actions";
 
 // export const metadata: Metadata = {
 //   title: "COMP2023",
@@ -12,6 +15,16 @@ import { useBreakpoint } from "@/lib/ui/tailwindcss/client/hooks/breakpoint";
 
 export default function Home() {
   const lg = useBreakpoint("lg");
+
+  const [sections, dispatch, isPending] = useFormState(compileJmm, [{
+    name: "Waiting for input...",
+    uuid: "waiting-for-input",
+    status: "good",
+    content: "",
+  }] as ProtocolSection[]);
+  
+  console.log({sections});
+
   return (
     <main className="grid h-dvh grid-rows-[max-content,1fr] gap-x-[0.1rem] grid-cols-2">
       <Header className="col-start-1 col-span-2" />
@@ -42,12 +55,54 @@ export default function Home() {
                 </TabSelector>
             </nav>
           </div>
-          <div className="overflow-x-auto outline-2 -outline-offset-2 outline-teal-300 focus-visible:outline">
-            <pre className="block w-max p-4">
-              {
-                "a\nb\nc\n\n\n\n\nn---------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\nn\n\nn\n\n\n\nn\n\n\n\n\n\n\n\nn\n\n\n\n\n\n\nn\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\n\n\n\n\nn\n\n\nn\n\n\n\n\n\nf"
-              }
-            </pre>
+          <div className="dark:bg-neutral-900 overflow-x-auto outline-2 -outline-offset-2 outline-teal-300 focus-visible:outline">
+            <Highlight initialCode={`
+import io;
+
+class Main {
+
+    public static void main(String[] args) {
+        
+        // Initialize status
+        int status;
+        status = 0;
+        
+        printArray(args);
+    }
+    
+    public static void printArray(String[] args) {
+        int i;
+
+        i = 0;
+        while (i < args.length) {
+            printString(args[i]);
+        }
+    }
+
+    public static void printString(String arg) {
+        io.println(arg);
+    }
+
+    public static void printLineNumber(int i) {
+        io.print(i);
+    }
+
+    public static void printLine(String arg, int lineNum) {
+        printLineNumber(lineNum);
+        printString(arg);
+    }
+
+    public static void printLines(String[] args) {
+        int i;
+
+        i = 0;
+        while (i < args.length) {
+            printLine(args[i], i);
+        }
+    }
+}
+      
+`.trim()} />
           </div>
         </section>
       </TabController>
