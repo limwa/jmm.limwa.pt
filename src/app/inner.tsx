@@ -12,11 +12,7 @@ import { OutputTabSelectors } from "@/lib/ui/protocol/OutputTabSelectors";
 import { OutputTabController } from "@/lib/ui/protocol/OutputTabController";
 import { CompilerProvider } from "@/lib/hooks/compiler";
 
-export function Inner() {
-    const lg = useBreakpoint("lg");
-
-  return (
-    <CompilerProvider initialCode={`// Insert your code here
+const defaultCode = `// Insert your code here
 
 // After 1s, it will automatically be compiled and the result
 // will be shown on the other tabs.
@@ -27,7 +23,13 @@ export function Inner() {
 class HelloWorld {
 
 }
-`}>
+`;
+
+export function Inner({ initialCode }: { initialCode: string | null }) {
+    const lg = useBreakpoint("lg");
+
+  return (
+    <CompilerProvider initialCode={initialCode ?? defaultCode}>
       <main className={cn("grid h-dvh grid-rows-[max-content,1fr] gap-x-[0.15rem] grid-cols-2 lg:bg-neutral-300")}>
         <Header className="col-start-1 col-span-2" />
         <TabController initialTab="input" key={(lg.loading || lg.active) ? "tab-controller-input" : "tab-controller-all"}>
