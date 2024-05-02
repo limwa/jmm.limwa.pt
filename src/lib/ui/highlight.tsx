@@ -9,7 +9,7 @@ export function Highlight() {
   const { isLoading, html } = useEditor(code);
 
   return (
-    <div className="relative min-w-full w-max min-h-full p-4 font-mono dark:selection:bg-neutral-400/20">
+    <div className="relative min-w-full w-max min-h-full p-4 font-mono selection:bg-neutral-400/30">
       {isLoading ? (
         <p className="tracking-wider text-black drop-shadow-[0_0_0.025rem_black] dark:text-white dark:drop-shadow-[0_0_0.1rem_white]">
           Loading...
@@ -19,7 +19,7 @@ export function Highlight() {
             <textarea
               id="input"
               name="input"
-              className="absolute pl-[4rem] p-4 inset-0 size-full outline-none resize-none bg-transparent text-transparent caret-white selection:text-transparent"
+              className="absolute pl-[4rem] p-4 inset-0 size-full outline-none resize-none bg-transparent text-transparent caret-black dark:caret-white selection:text-transparent"
               value={code}
               autoCapitalize="off"
               autoComplete="off"
