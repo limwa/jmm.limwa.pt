@@ -1,12 +1,16 @@
+"use client";
+
 import "client-only";
 
 import { useTabSelectionContext } from "./hooks/context";
 
 export function TabContent({
-  builder,
+  name,
+  children,
 }: {
-  builder: (name: string) => React.ReactNode;
+  name: string;
+  children: React.ReactNode;
 }) {
   const { selectedTab } = useTabSelectionContext();
-  return builder(selectedTab);
+  return selectedTab === name && children;
 }

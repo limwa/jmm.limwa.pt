@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useEditor } from "./editor/use-editor";
+import { useCompilerContext } from "../hooks/compiler";
 
-export function Highlight({ initialCode }: { initialCode: string }) {
-  const [code, setCode] = useState(initialCode);
+export function Highlight() {
+  const { code, setCode } = useCompilerContext();
   const { isLoading, html } = useEditor(code);
 
   return (
-    <div className="relative w-max p-4 font-mono">
+    <div className="relative w-max min-w-full h-full p-4 font-mono dark:selection:bg-neutral-400/20">
       {isLoading ? (
         <p className="tracking-wider text-black drop-shadow-[0_0_0.025rem_black] dark:text-white dark:drop-shadow-[0_0_0.1rem_white]">
           Loading...
@@ -18,7 +19,7 @@ export function Highlight({ initialCode }: { initialCode: string }) {
             <textarea
               id="input"
               name="input"
-              className="absolute size-full outline-none resize-none bg-transparent overflow-visible text-transparent caret-white selection:text-transparent dark:selection:bg-neutral-400/20"
+              className="absolute pl-[3em] size-full outline-none resize-none bg-transparent text-transparent caret-white selection:text-transparent"
               value={code}
               autoCapitalize="off"
               autoComplete="off"
@@ -33,14 +34,14 @@ export function Highlight({ initialCode }: { initialCode: string }) {
                   var end = e.currentTarget.selectionEnd;
 
                   // set textarea value to: text before caret + tab + text after caret
-                  e.currentTarget.value =
-                    e.currentTarget.value.substring(0, start) +
-                    "    " +
-                    e.currentTarget.value.substring(end);
-
+                  const newCode = e.currentTarget.value.substring(0, start) + "    " + e.currentTarget.value.substring(end);
+                  e.currentTarget.value = newCode;
+                  
                   // put caret at right position again
                   e.currentTarget.selectionStart = e.currentTarget.selectionEnd =
-                    start + 4;
+                  start + 4;
+
+                  setCode(newCode);
                 }
               }}
             />

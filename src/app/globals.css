@@ -10,6 +10,22 @@ html .shiki {
     }
 }
 
+html .shiki .line {
+  counter-increment: line-numbering;
+
+  &::before {
+    content: counter(line-numbering);
+    display: inline-block;
+    width: 2em;
+    margin-right: 1em;
+    color: var(--shiki-line-number-color);
+    text-align: right;
+    user-select: none;
+
+    @apply dark:text-neutral-400;
+  }
+}
+
 html.dark .shiki,
 html.dark .shiki span {
   color: var(--shiki-dark) !important;
