@@ -6,16 +6,16 @@ import fs from "fs/promises";
 import path from "path";
 
 const protocolRegex =
-  /<section uuid="(?<uuid>.*?)" name="(?<name>.*?)">\n(?<content>(.|\n)*?)\n<endsection uuid="\k<uuid>" status="(?<status>good|bad)">/g;
+  /<section uuid="(?<uuid>.*?)" name="(?<name>.*?)">\n(?<content>(.|\n)*?)\n<endsection uuid="\k<uuid>" status="(?<status>good|bad|pending)">/g;
 
 export type ProtocolSection = {
   uuid: string;
   name: string;
-  status: "good" | "bad";
+  status: "good" | "bad" | "pending";
   content: string;
 };
 
-export async function compileJmm(_state: ProtocolSection[], fd: FormData): Promise<ProtocolSection[]> {
+export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   const code = fd.get("code");
   if (code === null || typeof code !== "string") {
     return [
@@ -33,7 +33,7 @@ export async function compileJmm(_state: ProtocolSection[], fd: FormData): Promi
   const inputFile = path.join(dir, "input.jmm");
 
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
-  const process = await $`./jmm/bin/jmm -d -r=1 -i=${inputFile}`
+  const process = await $`./jmm/bin/jmm -d -o -r=0 -i=${inputFile}`
     .stdout("piped")
     .stderr("piped")
     .noThrow();
@@ -49,7 +49,7 @@ export async function compileJmm(_state: ProtocolSection[], fd: FormData): Promi
     sections.push({
       name,
       uuid,
-      status: status as "good" | "bad", // Ensured by the regex
+      status: status as ProtocolSection["status"], // Ensured by the regex
       content: content.trim(),
     });
   }

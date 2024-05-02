@@ -3,7 +3,7 @@
 import { cn } from "@/lib/ui/utils/cn";
 import { useTabSelector } from "./hooks/selector";
 
-export function TabSelector({ name, readOnly, children }: { name: string, readOnly?: boolean, children?: React.ReactNode }) {
+export function TabSelector({ name, readOnly, className, children }: { name: string, className?: string, readOnly?: boolean, children?: React.ReactNode }) {
   const { selected, select } = useTabSelector(name);
   
   return (
@@ -11,9 +11,11 @@ export function TabSelector({ name, readOnly, children }: { name: string, readOn
       type="button"
       disabled={readOnly || selected}
       onClick={() => select()}
+      data-selected={selected || undefined}
       className={cn(
-        "focus-visible:outline outline-teal-300 outline-2 -outline-offset-2 grow border-t-2 border-t-transparent bg-neutral-700 px-4 py-2 text-center text-neutral-200 tracking-wide enabled:hover:bg-neutral-600 transition-colors",
-        selected && "border-t-teal-300 bg-neutral-800",
+        "focus-visible:outline outline-teal-300 outline-2 -outline-offset-2 grow border-t-2 border-t-transparent bg-neutral-700 px-4 py-2 text-center text-neutral-200 tracking-wide enabled:hover:bg-neutral-800 enabled:hover:border-t-neutral-400 transition-colors",
+        selected && "border-t-neutral-4300",
+        className
       )}
     >
       {children}
