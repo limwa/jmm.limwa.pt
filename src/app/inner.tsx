@@ -30,20 +30,20 @@ export function Inner({ initialCode }: { initialCode: string | null }) {
 
   return (
     <CompilerProvider initialCode={initialCode ?? defaultCode}>
-      <main className={cn("grid h-dvh grid-rows-[max-content,1fr] gap-x-[0.15rem] grid-cols-2 lg:bg-neutral-300")}>
+      <main className={cn("grid h-dvh grid-rows-[max-content,1fr] gap-x-[0.15rem] grid-cols-2 bg-neutral-500 dark:bg-neutral-300")}>
         <Header className="col-start-1 col-span-2" />
         <TabController initialTab="input" key={(lg.loading || lg.active) ? "tab-controller-input" : "tab-controller-all"}>
           <section className={"grid grid-cols-1 grid-rows-[max-content,1fr] overflow-y-auto col-span-2 lg:col-span-1"}> {/* col-span-2 lg:col-span-1 */}
             <div className="overflow-x-auto">
               <nav className="flex w-full lg:flex-wrap">
-                <TabSelector name="input" readOnly={lg.loading || lg.active} className="data-[selected]:bg-neutral-900">
+                <TabSelector name="input" readOnly={lg.loading || lg.active} className="data-[selected]:bg-neutral-100 dark:data-[selected]:bg-neutral-900">
                   <h2>Input</h2>
                 </TabSelector>
                 {!lg.loading && !lg.active && <OutputTabSelectors />}
               </nav>
             </div>
             <TabContent name="input">
-              <div className="dark:bg-neutral-900 overflow-x-auto outline-2 -outline-offset-2 outline-teal-300 focus-visible:outline">
+              <div className="bg-neutral-100 dark:bg-neutral-900 overflow-x-auto outline-2 -outline-offset-2 outline-teal-500 dark:outline-teal-300 focus-visible:outline">
                 <Highlight />
               </div>
             </TabContent>
@@ -55,12 +55,12 @@ export function Inner({ initialCode }: { initialCode: string | null }) {
             <section className="hidden lg:grid grid-cols-1 grid-rows-[max-content,1fr] overflow-y-auto">
               <div className="overflow-x-auto">
                 <nav className="flex w-full lg:flex-wrap">
-                  <TabSelector name="loading" readOnly className="border-t-neutral-400 bg-neutral-950">
+                  <TabSelector name="loading" readOnly className="border-t-neutral-400 bg-neutral-50 dark:bg-neutral-950">
                     <h2>Loading...</h2>
                   </TabSelector>
                 </nav>
               </div>
-              <div className="overflow-x-auto outline-2 -outline-offset-2 outline-teal-300 focus-visible:outline dark:bg-neutral-950 dark:text-white dark:selection:bg-neutral-400/20" />
+              <div className="overflow-x-auto outline-2 -outline-offset-2 outline-teal-500 dark:outline-teal-300 focus-visible:outline bg-neutral-50 dark:bg-neutral-950 text-black dark:text-white" />
             </section>
           </TabController>
         )}

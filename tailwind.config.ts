@@ -5,7 +5,7 @@ const config = {
     "./src/lib/ui/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class",
+  darkMode: "media",
   plugins: [],
 } satisfies Config;
 
