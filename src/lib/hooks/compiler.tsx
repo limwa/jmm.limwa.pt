@@ -31,18 +31,8 @@ export function useCompilerContext() {
   return context;
 }
 
-function getCodeFromUrl() {
-  const params = new URLSearchParams(document.location.search);
-  const encodedCode = params.get("code");
-
-  if (!encodedCode) return;
-
-  const code = decode(encodedCode);
-  if (!!code) return code;
-}
-
 function useCompiler({ initialCode }: { initialCode: string }) {
-  const [code, setCode] = useState(getCodeFromUrl() ?? initialCode);
+  const [code, setCode] = useState(initialCode);
   const debouncedCode = useDebounce(code, 3000);
 
   const [compiling, startTransition] = useTransition();
@@ -59,7 +49,7 @@ function useCompiler({ initialCode }: { initialCode: string }) {
     const lifetime = createLifetime();
 
     const encodedCode = encode(debouncedCode);
-    if (!!encodedCode) {
+    if (encodedCode !== null) {
       const params = new URLSearchParams();
       params.set("code", encodedCode);
 

@@ -5,7 +5,10 @@ export const metadata: Metadata = {
 
 import type { Metadata } from "next";
 import { Inner } from "./inner";
+import { decode } from "@/lib/utils/base64";
 
-export default function Home() {
-  return <Inner />
+export default function Home({ searchParams }: { searchParams: Record<string, string | string[] | undefined>}) {
+  const code = typeof searchParams["code"] !== "string" ? null : searchParams["code"];
+  const decodedCode = code !== null ? decode(code) : null;
+  return <Inner initialCode={decodedCode} />
 }
