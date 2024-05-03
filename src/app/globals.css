@@ -24,7 +24,7 @@ html .shiki .line::before {
   text-align: right;
   user-select: none;
 
-  @apply dark:text-neutral-400;
+  @apply text-neutral-400;
 }
 
 @media (prefers-color-scheme: dark) {
