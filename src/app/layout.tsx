@@ -11,7 +11,7 @@ export default function RootLayout({
 }>) {
   return (
     <BreakpointProvider>
-      <html className="dar" lang="en">
+      <html lang="en">
         <body className={inter.className}>{children}</body>
       </html>
     </BreakpointProvider>

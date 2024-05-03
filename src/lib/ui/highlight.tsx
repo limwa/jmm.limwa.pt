@@ -26,9 +26,12 @@ export function Highlight() {
               autoCorrect="off"
               spellCheck={false}
               data-enable-grammarly="false" 
-              onChange={(e) => setCode(e.currentTarget.value)}
+              onChange={(e) => {
+                const newCode = e.currentTarget.value.replaceAll('\t', '    ');
+                setCode(newCode);
+              }}
               onKeyDown={(e) => {
-                if (e.key == "Tab") {
+                if (e.key === "Tab") {
                   e.preventDefault();
                   var start = e.currentTarget.selectionStart;
                   var end = e.currentTarget.selectionEnd;
