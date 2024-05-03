@@ -10,7 +10,7 @@ export function OutputTabSelectors() {
           <div className="flex gap-4 items-center w-max mx-auto">
             <h2>{section.name}</h2>
             <div className={cn(
-              "size-1.5 rounded-full",
+              "size-2 rounded-full",
               section.status === "good"
                 ? "bg-teal-500 dark:bg-teal-300"
                 : section.status === "bad"
