@@ -39,7 +39,6 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     .cwd("./compiler")
     .noThrow();
 
-    console.log(process.stdout);
   try {
     await fs.rm(dir, { recursive: true, force: true });
 
