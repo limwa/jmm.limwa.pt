@@ -3,7 +3,7 @@
 This is the repository for the website of the [jmm compiler](https://jmm.limwa.pt) website.
 
 jmm is a subset of the Java programming language, used in the Compilers course
-at (FEUP)[https://fe.up.pt].
+at [FEUP](https://sigarra.up.pt/feup/pt/web_page.inicial).
 
 This tool was made to help students understand the steps taken by the compiler to transform
 the source code into the final executable.
