@@ -4,16 +4,17 @@
 
 html .shiki {
     background-color: transparent !important;
+}
 
-    &, & > * {
+html .shiki, html .shiki > * {
         font-family: inherit;
-    }
 }
 
 html .shiki .line {
   counter-increment: line-numbering;
+}
 
-  &::before {
+html .shiki .line::before {
     content: counter(line-numbering);
     display: inline-block;
     width: 2em;
@@ -23,7 +24,6 @@ html .shiki .line {
     user-select: none;
 
     @apply dark:text-neutral-400;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
