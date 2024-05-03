@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import type { Breakpoints } from "../../server/config";
 import { useBreakpointsContext } from "./context";
 
-export function useBreakpoint(breakpoint: keyof Breakpoints): { loading: true } | { loading: false; active: boolean } {
+export function useBreakpoint(
+  breakpoint: keyof Breakpoints,
+): { loading: true } | { loading: false; active: boolean } {
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(false);
 
@@ -13,7 +15,7 @@ export function useBreakpoint(breakpoint: keyof Breakpoints): { loading: true } 
 
   useEffect(() => {
     setLoading(false);
-    
+
     const query = window.matchMedia(`(min-width: ${breakpointWidth})`);
     const controller = new AbortController();
 

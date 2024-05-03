@@ -37,10 +37,7 @@ function useHighlighter() {
 
   return !!highlighter
     ? {
-        codeToHtml: (
-          code: string,
-          { lang }: { lang: string }
-        ) =>
+        codeToHtml: (code: string, { lang }: { lang: string }) =>
           highlighter.codeToHtml(code, {
             lang,
             themes: {

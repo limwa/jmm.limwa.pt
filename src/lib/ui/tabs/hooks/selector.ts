@@ -1,10 +1,10 @@
 import { useTabSelectionContext } from "./context";
 
 export function useTabSelector(name: string) {
-    const tabs = useTabSelectionContext();
+  const tabs = useTabSelectionContext();
 
-    return {
-        selected: tabs.selectedTab === name,
-        select: () => tabs.setSelectedTab(name),
-    }
+  return {
+    selected: tabs.selectedTab === name,
+    select: () => tabs.setSelectedTab(name),
+  };
 }

@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 html .shiki {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
-html .shiki, html .shiki > * {
-        font-family: inherit;
+html .shiki,
+html .shiki > * {
+  font-family: inherit;
 }
 
 html .shiki .line {
@@ -15,15 +16,15 @@ html .shiki .line {
 }
 
 html .shiki .line::before {
-    content: counter(line-numbering);
-    display: inline-block;
-    width: 2em;
-    margin-right: 1em;
-    color: var(--shiki-line-number-color);
-    text-align: right;
-    user-select: none;
+  content: counter(line-numbering);
+  display: inline-block;
+  width: 2em;
+  margin-right: 1em;
+  color: var(--shiki-line-number-color);
+  text-align: right;
+  user-select: none;
 
-    @apply dark:text-neutral-400;
+  @apply dark:text-neutral-400;
 }
 
 @media (prefers-color-scheme: dark) {

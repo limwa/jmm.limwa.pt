@@ -7,5 +7,5 @@ type ResolvedConfig = ReturnType<typeof resolveProjectConfig>;
 export type Breakpoints = ResolvedConfig["theme"]["screens"];
 
 export function resolveProjectConfig() {
-    return resolveConfig(tailwindConfig);
+  return resolveConfig(tailwindConfig);
 }

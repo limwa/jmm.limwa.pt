@@ -1,28 +1,29 @@
 export function createLifetime() {
-    const controller = new AbortController();
-    
-    function runIfMounted<T, U = void>(ifMounted: () => T, ifNotMounted?: () => U) {
-        return !controller.signal.aborted
-            ? ifMounted()
-            : ifNotMounted?.();
-    }
+  const controller = new AbortController();
 
-    function createCleanup() {
-        return () => controller.abort();
-    }
+  function runIfMounted<T, U = void>(
+    ifMounted: () => T,
+    ifNotMounted?: () => U,
+  ) {
+    return !controller.signal.aborted ? ifMounted() : ifNotMounted?.();
+  }
 
-    function createCleanupAndRun(callback: () => unknown) {
-        const cleanup = createCleanup();
-        return () => {
-            cleanup();
-            callback();
-        }
-    }
+  function createCleanup() {
+    return () => controller.abort();
+  }
 
-    return {
-        signal: controller.signal,
-        runIfMounted,
-        createCleanup,
-        createCleanupAndRun,
-    }
+  function createCleanupAndRun(callback: () => unknown) {
+    const cleanup = createCleanup();
+    return () => {
+      cleanup();
+      callback();
+    };
+  }
+
+  return {
+    signal: controller.signal,
+    runIfMounted,
+    createCleanup,
+    createCleanupAndRun,
+  };
 }

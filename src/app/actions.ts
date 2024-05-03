@@ -37,7 +37,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     .stdout("piped")
     .stderr("piped")
     .noThrow();
-    
+
   try {
     await fs.rm(dir, { recursive: true, force: true });
 
@@ -60,13 +60,15 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
         stderr: process.stderr,
       });
 
-      return [{
-        uuid: "internal-error",
-        name: "Internal Error",
-        content:
-          "An unknown error occurred, please try again or contact an administrator.",
-        status: "bad",
-      }]
+      return [
+        {
+          uuid: "internal-error",
+          name: "Internal Error",
+          content:
+            "An unknown error occurred, please try again or contact an administrator.",
+          status: "bad",
+        },
+      ];
     }
 
     return sections;
