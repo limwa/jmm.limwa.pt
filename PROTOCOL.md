@@ -34,7 +34,7 @@ The footer is a single line that follows the format: `<endsection uuid="<UUID>" 
 - `<UUID>` is the unique identifier of the section. It must match the one in the header.
 - `<STATUS>` is the status of the section, which can be either `good`, `bad` or `pending`. This status will influence the color of the status indicator of the section in the website.
 
-## Java Adapter
+### Java Adapter
 
 There is a Java adapter available in [./protocol/JmmProtocolAdapter.java](./protocol/JmmProtocolAdapter.java) that can be used to integrate the jmm protocol into your compiler.
 
@@ -92,7 +92,7 @@ JmmProtocolAdapter.createSection("Jasmin", jasminResult.getJasminCode());
 
 ```
 
-## Example
+## Compiler Output Example
 
 Here is an example of the output of the compiler:
 
