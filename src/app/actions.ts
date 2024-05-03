@@ -37,14 +37,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     .stdout("piped")
     .stderr("piped")
     .noThrow();
-
-  if (process.stderr) {
-    console.error({
-      type: "Compilation Stderr",
-      stderr: process.stderr,
-    });
-  }
-
+    
   try {
     await fs.rm(dir, { recursive: true, force: true });
 
@@ -59,6 +52,21 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
         status: status as ProtocolSection["status"], // Ensured by the regex
         content: content.trim(),
       });
+    }
+
+    if (sections.length === 0) {
+      console.error({
+        type: "Compilation Error",
+        stderr: process.stderr,
+      });
+
+      return [{
+        uuid: "internal-error",
+        name: "Internal Error",
+        content:
+          "An unknown error occurred, please try again or contact an administrator.",
+        status: "bad",
+      }]
     }
 
     return sections;
