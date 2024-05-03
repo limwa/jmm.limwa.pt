@@ -12,7 +12,7 @@ the source code into the final executable.
 
 To run the website, you need to have [Node.js](https://nodejs.org/en/) installed.
 
-You will also need a compiler that is compatible with the [jmm protocol](./PROTOCOL.md)
+You will also need a compiler that is compatible with the [jmm protocol](./PROTOCOL.md).
 The executable for the compiler should be placed in `./compiler/jmm/bin/jmm`.
 
 After having both prerequisites taken care of, you can run the following commands:
