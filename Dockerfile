@@ -1,5 +1,12 @@
 FROM node:18-alpine AS base
 
+FROM base as downloader
+
+ARG JMM_URL
+RUN wget ${JMM_URL} -O jmm.zip
+
+RUN unzip jmm.zip -d jmm
+
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -55,7 +62,7 @@ RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --chown=nextjs:nodejs ./jmm /app/jmm
+COPY --from=downloader --chown=nextjs:nodejs ./jmm /app/
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
