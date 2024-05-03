@@ -14,7 +14,7 @@ import { CompilerProvider } from "@/lib/hooks/compiler";
 
 const defaultCode = `// Insert your code here
 
-// After 1s, it will automatically be compiled and the result
+// After 3s, it will automatically be compiled and the result
 // will be shown on the other tabs.
 //
 // A green circle indicates that the step was performed

@@ -36,8 +36,10 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   const process = await $`./jmm/bin/jmm -d -o -r=0 -i=${inputFile}`
     .stdout("piped")
     .stderr("piped")
+    .cwd("./compiler")
     .noThrow();
 
+    console.log(process.stdout);
   try {
     await fs.rm(dir, { recursive: true, force: true });
 

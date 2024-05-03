@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# jmm.limwa.pt
 
-## Getting Started
+This is the repository for the website of the [jmm compiler](https://jmm.limwa.pt) website.
 
-First, run the development server:
+jmm is a subset of the Java programming language, used in the Compilers course
+at (FEUP)[https://fe.up.pt].
+
+This tool was made to help students understand the steps taken by the compiler to transform
+the source code into the final executable.
+
+## How to run
+
+To run the website, you need to have [Node.js](https://nodejs.org/en/) installed.
+
+You will also need a compiler that is compatible with the [jmm protocol](./PROTOCOL.md)
+The executable for the compiler should be placed in `./compiler/jmm/bin/jmm`.
+
+After having both prerequisites taken care of, you can run the following commands:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start a development server on `localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To deploy the website, the recommended method is to use [Docker](https://www.docker.com/).
 
-## Learn More
+There are two Dockerfiles available that you can use.
 
-To learn more about Next.js, take a look at the following resources:
+1. `Dockerfile` - Uses the `JMM_URL` build argument to download a zip file with all of the files needed to run the compiler.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    docker build --build-arg JMM_URL=https://example.com/compiler.zip -t jmm-compiler .
+    docker run -itp 3000:3000 jmm-compiler
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. `Dockerfile.copy` - Copies the files in the `./compiler` directory to the image.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```bash
+    docker build -f Dockerfile.copy -t jmm-compiler .
+    docker run -itp 3000:3000 jmm-compiler
+    ```

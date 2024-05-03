@@ -3,9 +3,9 @@ FROM node:18-alpine AS base
 FROM base as downloader
 
 ARG JMM_URL
-RUN wget ${JMM_URL} -O jmm.zip
+RUN wget ${JMM_URL} -O compiler.zip
 
-RUN unzip jmm.zip -d jmm
+RUN unzip compiler.zip -d compiler
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -62,7 +62,7 @@ RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=downloader --chown=nextjs:nodejs ./jmm /app/
+COPY --from=downloader --chown=nextjs:nodejs ./compiler /app/compiler
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
