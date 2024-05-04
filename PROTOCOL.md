@@ -20,7 +20,9 @@ This command will compile the input file and output the result to the standard o
 
 ## Output format
 
-The output of the compiler should consist of a series of sections.
+The output of a compiler should contain a single `<output>` and a single `<endoutput>` tag.
+
+Within those tags, the contents of the output should consist of a series of sections.
 Each section is composed of a header, a body and a footer.
 
 The header is a single line that follows the format: `<section uuid="<UUID>" name="<NAME>">`.
@@ -36,60 +38,63 @@ The footer is a single line that follows the format: `<endsection uuid="<UUID>" 
 
 ### Java Adapter
 
-There is a Java adapter available in [./protocol/JmmProtocolAdapter.java](./protocol/JmmProtocolAdapter.java) that can be used to integrate the jmm protocol into your compiler.
+There is a Java adapter available in [protocol/JmmProtocolAdapter.java](./protocol/JmmProtocolAdapter.java) that can be used to integrate the jmm protocol into your compiler.
 
 This adapter will take care of creating the section headers and footers, as well as determining UUIDs and statuses for each section.
 
-The adapter will rely on you outputing the result to the standard output yourself.
-If any error is thrown inside the method that is passed to the adapter, the section will be marked as bad.
+The adapter will rely on you outputing the result to the standard output (or standard error) yourself.
+If any error is thrown inside the lambda that is passed to the adapter, the section will be marked as bad.
 
 Here is how you can use the adapter:
 
 ```java
-// Check if there are parsing errors
-JmmProtocolAdapter.createSection("Parsing", () -> TestUtils.noErrors(parserResult.getReports()));
+JmmProtocolAdapter.start(adapter -> {
+    // ...
 
-// ...
+    // Check if there are parsing errors
+    adapter.createSection("Parsing", () -> TestUtils.noErrors(parserResult.getReports()));
 
-// Check if there are semantic analysis errors
-JmmProtocolAdapter.createSection("Semantic Analysis", () -> TestUtils.noErrors(analyzerResult.getReports()));
+    // ...
 
-// Create section for the symbol table and AST
-JmmProtocolAdapter.createSection("Symbol Table", analyzerResult.getSymbolTable().print());
-JmmProtocolAdapter.createSection("AST", analyzerResult.getRootNode().toTree());
+    // Check if there are semantic analysis errors
+    adapter.createSection("Semantic Analysis", () -> TestUtils.noErrors(analyzerResult.getReports()));
 
-// ...
+    // Create section for the symbol table and AST
+    adapter.createSection("Symbol Table", analyzerResult.getSymbolTable().print());
+    adapter.createSection("AST", analyzerResult.getRootNode().toTree());
 
-// Check if there are AST Optimization errors
-JmmProtocolAdapter.createSection("AST Optimizations", () -> TestUtils.noErrors(optimizedAstResult.getReports()));
+    // ...
 
-// Create section for the optimized AST
-JmmProtocolAdapter.createSection("Optimized AST", optimizedAstResult.getRootNode().toTree());
+    // Check if there are AST Optimization errors
+    adapter.createSection("AST Optimizations", () -> TestUtils.noErrors(optimizedAstResult.getReports()));
 
-// ...
+    // Create section for the optimized AST
+    adapter.createSection("Optimized AST", optimizedAstResult.getRootNode().toTree());
 
-// Check if there are OLLIR Generation errors
-JmmProtocolAdapter.createSection("OLLIR Generation", () -> TestUtils.noErrors(ollirResult.getReports()));
+    // ...
 
-// Create section for the OLLIR code
-JmmProtocolAdapter.createSection("OLLIR", ollirResult.getOllirCode());
+    // Check if there are OLLIR Generation errors
+    adapter.createSection("OLLIR Generation", () -> TestUtils.noErrors(ollirResult.getReports()));
 
-// ...
+    // Create section for the OLLIR code
+    adapter.createSection("OLLIR", ollirResult.getOllirCode());
 
-// Check if there are OLLIR Optimization errors
-JmmProtocolAdapter.createSection("OLLIR Optimizations", () -> TestUtils.noErrors(optimizedOllirResult.getReports()));
+    // ...
 
-// Create section for the optimized OLLIR code
-JmmProtocolAdapter.createSection("Optimized OLLIR", optimizedOllirResult.getOllirCode());
+    // Check if there are OLLIR Optimization errors
+    adapter.createSection("OLLIR Optimizations", () -> TestUtils.noErrors(optimizedOllirResult.getReports()));
 
-// ...
+    // Create section for the optimized OLLIR code
+    adapter.createSection("Optimized OLLIR", optimizedOllirResult.getOllirCode());
 
-// Check if there are Jasmin Generation errors
-JmmProtocolAdapter.createSection("Jasmin Generation", () -> TestUtils.noErrors(jasminResult.getReports()));
+    // ...
 
-// Create section for the Jasmin code
-JmmProtocolAdapter.createSection("Jasmin", jasminResult.getJasminCode());
+    // Check if there are Jasmin Generation errors
+    adapter.createSection("Jasmin Generation", () -> TestUtils.noErrors(jasminResult.getReports()));
 
+    // Create section for the Jasmin code
+    adapter.createSection("Jasmin", jasminResult.getJasminCode());
+});
 ```
 
 ## Compiler Output Example
@@ -97,12 +102,13 @@ JmmProtocolAdapter.createSection("Jasmin", jasminResult.getJasminCode());
 Here is an example of the output of the compiler:
 
 ```xml
+<output>
 Executing with args: [-d, -o, -r=0, -i=/tmp/jmm-compile-XXXXXX25Qy71/input.jmm]
-<section uuid="fe396d18-f00b-4386-b778-a1c08c27beff" name="Parsing">
-<endsection uuid="fe396d18-f00b-4386-b778-a1c08c27beff" status="good">
-<section uuid="b6a45176-da9d-4307-a2fe-83803d5a37ca" name="Semantic Analysis">
-<endsection uuid="b6a45176-da9d-4307-a2fe-83803d5a37ca" status="good">
-<section uuid="6841f6d5-f141-41c0-a9d5-1d3ed94dceb5" name="Symbol Table">
+<section uuid="c9e076f6-7a89-4f11-b0b8-1f39486414d4" name="Parsing">
+<endsection uuid="c9e076f6-7a89-4f11-b0b8-1f39486414d4" status="good">
+<section uuid="a951f633-828a-46fa-872a-5de18fe0f538" name="Semantic Analysis">
+<endsection uuid="a951f633-828a-46fa-872a-5de18fe0f538" status="good">
+<section uuid="0f683489-32bb-4592-a8c9-ce2b79eea997" name="Symbol Table">
 Class: HelloWorld
 Super: Object
 
@@ -112,22 +118,22 @@ Fields: <no fields>
 
 Methods: 0
 
-<endsection uuid="6841f6d5-f141-41c0-a9d5-1d3ed94dceb5" status="good">
-<section uuid="77a7461f-3d7f-440a-8b6e-1761ee25a37f" name="AST">
+<endsection uuid="0f683489-32bb-4592-a8c9-ce2b79eea997" status="good">
+<section uuid="e3f90e4a-88a6-4a98-9081-64b5d8aa0818" name="AST">
 Program
    ClassDeclaration (name: HelloWorld)
 
-<endsection uuid="77a7461f-3d7f-440a-8b6e-1761ee25a37f" status="good">
-<section uuid="be154cf5-fc54-4c1f-bb20-4002ec09f6d0" name="AST Optimizations">
-<endsection uuid="be154cf5-fc54-4c1f-bb20-4002ec09f6d0" status="good">
-<section uuid="c8888655-8a25-4381-aea1-4b49459ecbfd" name="Optimized AST">
+<endsection uuid="e3f90e4a-88a6-4a98-9081-64b5d8aa0818" status="good">
+<section uuid="84945204-df56-454c-a608-0ccbdcae0ed3" name="AST Optimizations">
+<endsection uuid="84945204-df56-454c-a608-0ccbdcae0ed3" status="good">
+<section uuid="6d2d2e6a-9c71-4591-8e3d-c76c73558ee7" name="Optimized AST">
 Program
    ClassDeclaration (name: HelloWorld)
 
-<endsection uuid="c8888655-8a25-4381-aea1-4b49459ecbfd" status="good">
-<section uuid="1c73a393-cee0-439e-99ae-b31dca69919b" name="OLLIR Generation">
-<endsection uuid="1c73a393-cee0-439e-99ae-b31dca69919b" status="good">
-<section uuid="0616cf5c-8a45-4438-a78a-0bdb9c3eb631" name="OLLIR">
+<endsection uuid="6d2d2e6a-9c71-4591-8e3d-c76c73558ee7" status="good">
+<section uuid="6f69e873-2905-4180-acfe-a1fe3817a264" name="OLLIR Generation">
+<endsection uuid="6f69e873-2905-4180-acfe-a1fe3817a264" status="good">
+<section uuid="323cdd7e-3310-496c-8de7-5f5124828280" name="OLLIR">
 
 HelloWorld {
 
@@ -136,10 +142,10 @@ HelloWorld {
     }
 }
 
-<endsection uuid="0616cf5c-8a45-4438-a78a-0bdb9c3eb631" status="good">
-<section uuid="e69be6fa-cf6d-4e15-9a02-56c8ae1a545d" name="OLLIR Optimizations">
-<endsection uuid="e69be6fa-cf6d-4e15-9a02-56c8ae1a545d" status="good">
-<section uuid="fc1247b1-293d-4513-ba83-5fe75a46b704" name="Optimized OLLIR">
+<endsection uuid="323cdd7e-3310-496c-8de7-5f5124828280" status="good">
+<section uuid="623dd908-84b8-443c-8863-df95ef4ba208" name="OLLIR Optimizations">
+<endsection uuid="623dd908-84b8-443c-8863-df95ef4ba208" status="good">
+<section uuid="3f102216-1732-4a9e-9f04-b7e12ade5692" name="Optimized OLLIR">
 
 HelloWorld {
 
@@ -148,10 +154,10 @@ HelloWorld {
     }
 }
 
-<endsection uuid="fc1247b1-293d-4513-ba83-5fe75a46b704" status="good">
-<section uuid="d28bb9e0-c7a4-4880-853c-1f305dbdca36" name="Jasmin Generation">
-<endsection uuid="d28bb9e0-c7a4-4880-853c-1f305dbdca36" status="good">
-<section uuid="018a4d6d-0180-429c-87b3-302c5a103f0d" name="Jasmin">
+<endsection uuid="3f102216-1732-4a9e-9f04-b7e12ade5692" status="good">
+<section uuid="94912fc0-6f11-4353-bb8c-594c64fc7bf4" name="Jasmin Generation">
+<endsection uuid="94912fc0-6f11-4353-bb8c-594c64fc7bf4" status="good">
+<section uuid="6b17151e-866f-47c4-b3b7-c1592ccc6bcf" name="Jasmin">
 .class public HelloWorld
 .super java/lang/Object
 
@@ -162,18 +168,20 @@ HelloWorld {
 .end method
 
 
-<endsection uuid="018a4d6d-0180-429c-87b3-302c5a103f0d" status="good">
-<section uuid="d3fd49b8-8683-4f6c-a30e-6332f93f5692" name="Register Allocation">
+<endsection uuid="6b17151e-866f-47c4-b3b7-c1592ccc6bcf" status="good">
+<section uuid="f54ccbbf-1757-4351-adef-13117968f826" name="Register Allocation">
 Register allocation for method `HelloWorld`: 1 registers are needed
 Variable this assigned to register #0
 
-<endsection uuid="d3fd49b8-8683-4f6c-a30e-6332f93f5692" status="good">
+<endsection uuid="f54ccbbf-1757-4351-adef-13117968f826" status="good">
+<endoutput>
 ```
 
 This output will be displayed in the website as a series of sections that the user can expand to see the content of each section. The status of each section will be displayed as a colored indicator, which can be either green (good), red (bad) or pulsating yellow (pending).
 
 ### Notes
 
-- All text that is not contained in a section, as specified above, will be ignored by the website.
+- All text that is not contained in a section, as specified above, will be ignored by the website, even if it is between `<output>` and `<endoutput>` tags.
 - All sections which don't have content will not be displayed in the website.
 - The content of every section is trimmed before being displayed in the website.
+- If the `<output>` and `<endoutput>` tags are not present, the website will display an "Internal Error" message and the content of the standard error will be printed in the server.
