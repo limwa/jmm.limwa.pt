@@ -5,8 +5,18 @@ import { $ } from "dax-sh";
 import fs from "fs/promises";
 import path from "path";
 
+const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
   /<section uuid="(?<uuid>.*?)" name="(?<name>.*?)">\n(?<content>(.|\n)*?)\n<endsection uuid="\k<uuid>" status="(?<status>good|bad|pending)">/g;
+
+type ParsedOutput =
+  | {
+      success: false;
+    }
+  | {
+      success: true;
+      sections: ProtocolSection[];
+    };
 
 export type ProtocolSection = {
   uuid: string;
@@ -14,6 +24,40 @@ export type ProtocolSection = {
   status: "good" | "bad" | "pending";
   content: string;
 };
+
+const internalServerError: ProtocolSection = {
+  uuid: "internal-error",
+  name: "Internal Error",
+  status: "bad",
+  content:
+    "An unknown error occurred, please try again or contact an administrator.",
+};
+
+function parseOutput(output: string): ParsedOutput {
+  const match = output.match(outputRegex);
+  if (!match) {
+    return { success: false };
+  }
+
+  const sectionMatches = match[0].matchAll(protocolRegex);
+  const sections: ProtocolSection[] = [];
+  
+  for (const sectionMatch of sectionMatches) {
+    const { name, uuid, status, content } = sectionMatch.groups!;
+
+    const trimmedContent = content.trim();
+    if (!trimmedContent) continue;
+
+    sections.push({
+      name,
+      uuid,
+      status: status as ProtocolSection["status"],
+      content: trimmedContent,
+    });
+  }
+
+  return { success: true, sections };
+}
 
 export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   const code = fd.get("code");
@@ -42,47 +86,19 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   try {
     await fs.rm(dir, { recursive: true, force: true });
 
-    const matches = process.stdout.matchAll(protocolRegex);
-
-    const sections: ProtocolSection[] = [];
-    for (const match of matches) {
-      const { name, uuid, status, content } = match.groups!;
-      sections.push({
-        name,
-        uuid,
-        status: status as ProtocolSection["status"], // Ensured by the regex
-        content: content.trim(),
-      });
-    }
-
-    if (sections.length === 0) {
+    const output = parseOutput(process.stdout);
+    if (!output.success) {
       console.error({
         type: "Compilation Error",
         stderr: process.stderr,
       });
 
-      return [
-        {
-          uuid: "internal-error",
-          name: "Internal Error",
-          content:
-            "An unknown error occurred, please try again or contact an administrator.",
-          status: "bad",
-        },
-      ];
+      return [internalServerError];
     }
 
-    return sections;
+    return output.sections;
   } catch (e) {
-    console.error(e);
-    return [
-      {
-        uuid: "internal-error",
-        name: "Internal Error",
-        content:
-          "An unknown error occurred, please try again or contact an administrator.",
-        status: "bad",
-      },
-    ];
+    console.error({ type: "Runtime Error", stderr: e });
+    return [internalServerError];
   }
 }
