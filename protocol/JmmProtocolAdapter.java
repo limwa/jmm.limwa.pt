@@ -4,8 +4,6 @@ import java.util.UUID;
 
 public class JmmProtocolAdapter {
 
-    private JmmProtocolAdapter() {}
-
     public interface ThrowingRunnable<E extends Throwable> {
         void run() throws E;
     }
@@ -22,6 +20,10 @@ public class JmmProtocolAdapter {
         U apply(T t) throws E;
     }
 
+    private JmmProtocolAdapter() {}
+
+    private boolean inSection = false;
+
     public static <E extends Throwable> void start(ThrowingConsumer<JmmProtocolAdapter, E> action) throws E {
         start(adapter -> {
             action.accept(adapter);
@@ -33,10 +35,18 @@ public class JmmProtocolAdapter {
         var adapter = new JmmProtocolAdapter();
 
         System.out.println("<output>");
-        var result = action.apply(adapter);
-        System.out.println("<endoutput>");
+        try {
+            var result = action.apply(adapter);
+            System.out.println("<endoutput>");
+            return result;
 
-        return result;
+        } catch (Throwable throwable) {
+            if (adapter.inSection) {
+                System.out.println("<endoutput>");
+            }
+
+            throw throwable;
+        }
     }
 
     public <E extends Throwable> void createSection(String name, ThrowingRunnable<E> action) throws E {
@@ -51,14 +61,16 @@ public class JmmProtocolAdapter {
         System.out.printf("<section uuid=\"%s\" name=\"%s\">%n", uuid, name);
 
         try {
+            inSection = true;
             var result = action.get();
-            System.out.printf("<endsection uuid=\"%s\" status=\"good\">%n", uuid);
+            inSection = false;
 
+            System.out.printf("<endsection uuid=\"%s\" status=\"good\">%n", uuid);
             return result;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Throwable throwable) {
+            System.out.println(throwable.getMessage());
             System.out.printf("<endsection uuid=\"%s\" status=\"bad\">%n", uuid);
-            throw e;
+            throw throwable;
         }
     }
 

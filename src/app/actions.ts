@@ -7,7 +7,7 @@ import path from "path";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
-  /<section uuid="(?<uuid>.*?)" name="(?<name>.*?)">\n(?<content>(.|\n)*?)\n<endsection uuid="\k<uuid>" status="(?<status>good|bad|pending)">/g;
+  /<section uuid="(?<uuid>.*?)" name="(?<name>.*?)">\n(?<content>(?:.|\n)*?)\n<endsection uuid="\k<uuid>" status="(?<status>good|bad|pending)">/g;
 
 type ParsedOutput =
   | {
@@ -89,7 +89,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     const output = parseOutput(process.stdout);
     if (!output.success) {
       console.error({
-        type: "Compilation Error",
+        type: "Compiler Internal Error",
         stderr: process.stderr,
       });
 
@@ -98,7 +98,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
     return output.sections;
   } catch (e) {
-    console.error({ type: "Runtime Error", stderr: e });
+    console.error({ type: "Runtime Internal Error", stderr: e });
     return [internalServerError];
   }
 }
