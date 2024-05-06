@@ -26,6 +26,7 @@ Within those tags, the contents of the output should consist of a series of sect
 Each section is composed of a header, a body and a footer.
 
 The header is a single line that follows the format: `<section uuid="<UUID>" name="<NAME>">`.
+
 - `<UUID>` is a unique identifier for the section (to prevent the content of the body to close the section).
 - `<NAME>` is the name of the section that will appear in the website.
 
@@ -33,6 +34,7 @@ The body is a series of lines that contain the content of the section.
 This content will be displayed in the website when the user selects the section.
 
 The footer is a single line that follows the format: `<endsection uuid="<UUID>" status="<STATUS>">`.
+
 - `<UUID>` is the unique identifier of the section. It must match the one in the header.
 - `<STATUS>` is the status of the section, which can be either `good`, `bad` or `pending`. This status will influence the color of the status indicator of the section in the website.
 

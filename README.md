@@ -32,14 +32,14 @@ There are two Dockerfiles available that you can use.
 
 1. `Dockerfile` - Uses the `JMM_URL` build argument to download a zip file with all of the files needed to run the compiler.
 
-    ```bash
-    docker build --build-arg JMM_URL=https://example.com/compiler.zip -t jmm-compiler .
-    docker run -itp 3000:3000 jmm-compiler
-    ```
+   ```bash
+   docker build --build-arg JMM_URL=https://example.com/compiler.zip -t jmm-compiler .
+   docker run -itp 3000:3000 jmm-compiler
+   ```
 
 2. `Dockerfile.copy` - Copies the files in the `./compiler` directory to the image.
 
-    ```bash
-    docker build -f Dockerfile.copy -t jmm-compiler .
-    docker run -itp 3000:3000 jmm-compiler
-    ```
+   ```bash
+   docker build -f Dockerfile.copy -t jmm-compiler .
+   docker run -itp 3000:3000 jmm-compiler
+   ```
