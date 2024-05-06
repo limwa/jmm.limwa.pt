@@ -90,6 +90,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     if (!output.success) {
       console.error({
         type: "Compiler Internal Error",
+        code,
         stderr: process.stderr,
       });
 
