@@ -1,6 +1,6 @@
 export const metadata: Metadata = {
-  title: "jmm.limwa.pt",
-  description: "An application to compile Java-- code",
+  title: process.env.APP_TITLE ?? "jmm compiler",
+  description: process.env.APP_DESCRIPTION ?? "An application to compile Java-- code",
 };
 
 import type { Metadata } from "next";
