@@ -28,18 +28,27 @@ This will start a development server on `localhost:3000`.
 
 To deploy the website, the recommended method is to use [Docker](https://www.docker.com/).
 
-There are two Dockerfiles available that you can use.
+There is a Dockerfile available that you can use, with several different ways to include your compiler.
 
-1. `Dockerfile` - Uses the `JMM_URL` build argument to download a zip file with all of the files needed to run the compiler.
+- `copy` - The default strategy, copies the files in the `./compiler` directory to the image.
+
+  ```bash
+  docker build -t jmm-compiler .
+  docker run -itp 3000:3000 jmm-compiler
+  ```
+
+- `download` - Uses the `JMM_URL` build argument to download a zip file with all of the files to be placed in the `./compiler` directory.
 
    ```bash
-   docker build --build-arg JMM_URL=https://example.com/compiler.zip -t jmm-compiler .
+   docker build --build-arg JMM_STRATEGY=download --build-arg JMM_URL=https://example.com/compiler.zip -t jmm-compiler .
    docker run -itp 3000:3000 jmm-compiler
    ```
 
-2. `Dockerfile.copy` - Copies the files in the `./compiler` directory to the image.
+- `git` - Uses the `JMM_URL` build argument to clone a git repository.
+  The optional `JMM_BRANCH` build argument can be used to specify the branch to clone.
+  This strategy then uses gradle to build the compiler using the `installDist` task.
 
    ```bash
-   docker build -f Dockerfile.copy -t jmm-compiler .
+   docker build --build-arg JMM_STRATEGY=git --build-arg JMM_URL=https://example.com/compiler.git -t jmm-compiler .
    docker run -itp 3000:3000 jmm-compiler
    ```
