@@ -24,7 +24,7 @@ RUN git clone --single-branch ${JMM_BRANCH:+--branch $JMM_BRANCH} ${JMM_URL} com
 
 RUN cd compiler_git && gradle installDist
 
-RUN mkdir -p compiler && cp -r compiler_git/build/install/jmm compiler/
+RUN mkdir -p compiler && cp -r compiler_git/config.properties compiler_git/build/install/jmm compiler/
 
 FROM ${JMM_STRATEGY} AS strategy
 
