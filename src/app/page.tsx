@@ -1,5 +1,5 @@
 export const metadata: Metadata = {
-  title: "jmm.limwa.pt",
+  title: "jmm compiler",
   description: "An application to compile Java-- code",
 };
 
