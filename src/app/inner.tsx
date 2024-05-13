@@ -4,13 +4,13 @@ import { Header } from "@/lib/ui/header";
 import { TabSelector } from "@/lib/ui/tabs/selector";
 import { TabController } from "@/lib/ui/tabs/controller";
 import { useBreakpoint } from "@/lib/ui/tailwindcss/client/hooks/breakpoint";
-import { Highlight } from "@/lib/ui/highlight";
 import { cn } from "@/lib/ui/utils/cn";
-import { TabContent } from "@/lib/ui/tabs/content";
 import { OutputTabContents } from "@/lib/ui/protocol/OutputTabContents";
 import { OutputTabSelectors } from "@/lib/ui/protocol/OutputTabSelectors";
 import { OutputTabController } from "@/lib/ui/protocol/OutputTabController";
 import { CompilerProvider } from "@/lib/hooks/compiler";
+import CodeEditor from "@/lib/ui/editor/codeEditor";
+import { TabContent } from "@/lib/ui/tabs/content";
 
 const defaultCode = `// Insert your code here
 
@@ -64,9 +64,7 @@ export function Inner({ initialCode }: { initialCode: string | null }) {
               </nav>
             </div>
             <TabContent name="input">
-              <div className="overflow-x-auto bg-neutral-100 outline-2 -outline-offset-2 outline-teal-500 focus-visible:outline dark:bg-neutral-900 dark:outline-teal-300">
-                <Highlight />
-              </div>
+              <CodeEditor initialCode={initialCode ?? defaultCode}/>
             </TabContent>
             {!lg.loading && !lg.active && <OutputTabContents />}
           </section>
