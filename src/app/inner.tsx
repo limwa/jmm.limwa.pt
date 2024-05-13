@@ -10,6 +10,7 @@ import { OutputTabSelectors } from "@/lib/ui/protocol/OutputTabSelectors";
 import { OutputTabController } from "@/lib/ui/protocol/OutputTabController";
 import { CompilerProvider } from "@/lib/hooks/compiler";
 import CodeEditor from "@/lib/ui/editor/codeEditor";
+import { TabContent } from "@/lib/ui/tabs/content";
 
 const defaultCode = `// Insert your code here
 
@@ -62,7 +63,9 @@ export function Inner({ initialCode }: { initialCode: string | null }) {
                 {!lg.loading && !lg.active && <OutputTabSelectors />}
               </nav>
             </div>
-            <CodeEditor initialCode={initialCode ?? defaultCode}/>
+            <TabContent name="input">
+              <CodeEditor initialCode={initialCode ?? defaultCode}/>
+            </TabContent>
             {!lg.loading && !lg.active && <OutputTabContents />}
           </section>
         </TabController>
