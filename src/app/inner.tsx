@@ -11,9 +11,10 @@ import { OutputTabContents } from "@/lib/ui/protocol/OutputTabContents";
 import { OutputTabSelectors } from "@/lib/ui/protocol/OutputTabSelectors";
 import { OutputTabController } from "@/lib/ui/protocol/OutputTabController";
 import { CompilerProvider } from "@/lib/hooks/compiler";
+import { OptimizationsToggle, RegisterAllocationToggle } from "@/lib/ui/toggle";
 
 const defaultCode = `// Insert your code here
-
+//
 // After 3s, it will automatically be compiled and the result
 // will be shown on the other tabs.
 //
@@ -25,11 +26,28 @@ class HelloWorld {
 }
 `;
 
-export function Inner({ initialCode }: { initialCode: string | null }) {
+const defaultOptimizations = true;
+const defaultRegisterAllocation = true;
+
+export function Inner({
+  initialCode,
+  initialRegisterAllocation,
+  initialOptimizations,
+}: {
+  initialCode: string | null;
+  initialRegisterAllocation: boolean | null;
+  initialOptimizations: boolean | null;
+}) {
   const lg = useBreakpoint("lg");
 
   return (
-    <CompilerProvider initialCode={initialCode ?? defaultCode}>
+    <CompilerProvider
+      initialCode={initialCode ?? defaultCode}
+      initialRegisterAllocation={
+        initialRegisterAllocation ?? defaultRegisterAllocation
+      }
+      initialOptimizations={initialOptimizations ?? defaultOptimizations}
+    >
       <main
         className={cn(
           "grid h-dvh grid-cols-2 grid-rows-[max-content,1fr] gap-x-[0.15rem] bg-neutral-500 dark:bg-neutral-300",
@@ -64,8 +82,14 @@ export function Inner({ initialCode }: { initialCode: string | null }) {
               </nav>
             </div>
             <TabContent name="input">
-              <div className="overflow-x-auto bg-neutral-100 outline-2 -outline-offset-2 outline-teal-500 focus-visible:outline dark:bg-neutral-900 dark:outline-teal-300">
-                <Highlight />
+              <div className="grid grid-cols-1 grid-rows-[1fr,max-content] overflow-y-auto">
+                <div className="overflow-y-auto bg-neutral-100 outline-2 -outline-offset-2 outline-teal-500 focus-visible:outline dark:bg-neutral-900 dark:outline-teal-300">
+                  <Highlight />
+                </div>
+                <div className="grid grid-cols-2 gap-x-[0.15rem] border-t-2 border-t-neutral-500 dark:border-t-neutral-300">
+                  <OptimizationsToggle />
+                  <RegisterAllocationToggle />
+                </div>
               </div>
             </TabContent>
             {!lg.loading && !lg.active && <OutputTabContents />}

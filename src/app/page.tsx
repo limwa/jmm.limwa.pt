@@ -1,6 +1,7 @@
 export const metadata: Metadata = {
   title: process.env.APP_TITLE ?? "jmm compiler",
-  description: process.env.APP_DESCRIPTION ?? "An application to compile Java-- code",
+  description:
+    process.env.APP_DESCRIPTION ?? "An application to compile Java-- code",
 };
 
 import type { Metadata } from "next";
@@ -17,5 +18,22 @@ export default function Home({
   const decodedCode = code !== null ? decode(code) : null;
   const noTabsCode =
     decodedCode === null ? null : decodedCode.replaceAll("\t", "    ");
-  return <Inner initialCode={noTabsCode} />;
+
+  const registerAllocation =
+    typeof searchParams["registerAllocation"] === "string"
+      ? searchParams["registerAllocation"] === "true"
+      : null;
+
+  const optimizations =
+    typeof searchParams["optimizations"] === "string"
+      ? searchParams["optimizations"] === "true"
+      : null;
+
+  return (
+    <Inner
+      initialCode={noTabsCode}
+      initialOptimizations={optimizations}
+      initialRegisterAllocation={registerAllocation}
+    />
+  );
 }

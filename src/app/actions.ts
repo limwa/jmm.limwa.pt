@@ -25,13 +25,16 @@ export type ProtocolSection = {
   content: string;
 };
 
+const adminInfo = (process.env.ADMIN_CONTACT_INFO ?? "").replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "");
+
 const internalServerError: ProtocolSection = {
   uuid: "internal-error",
   name: "Internal Error",
   status: "bad",
   content:
-    "An unknown error occurred, please try again or contact an administrator.",
+    `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`,
 };
+
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
@@ -72,16 +75,53 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
     ];
   }
 
+  const registerAllocationFd = fd.get("registerAllocation");
+  if (registerAllocationFd === null || typeof registerAllocationFd !== "string" || !["true", "false"].includes(registerAllocationFd)) {
+    return [
+      {
+        uuid: "bad-input",
+        name: "Input",
+        content: "No register allocation provided",
+        status: "bad",
+      },
+    ];
+  }
+
+  const registerAllocation = registerAllocationFd === "true";
+
+  const optimizationsFd = fd.get("optimizations");
+  if (optimizationsFd === null || typeof optimizationsFd !== "string" || !["true", "false"].includes(optimizationsFd)) {
+    return [
+      {
+        uuid: "bad-input",
+        name: "Input",
+        content: "No optimizations provided",
+        status: "bad",
+      },
+    ];
+  }
+
+  const optimizations = optimizationsFd === "true";
+
   const dir = await fs.mkdtemp("/tmp/jmm-compile-");
 
   const inputFile = path.join(dir, "input.jmm");
-
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
-  const process = await $`./jmm/bin/jmm -d -o -r=0 -i=${inputFile}`
+
+  const args = [
+    "-d",
+    `-i=${inputFile}`,
+  ]
+
+  if (optimizations) args.push("-o");
+  if (registerAllocation) args.push("-r=0");
+  
+  const process = await $`./jmm/bin/jmm ${args}`
     .stdout("piped")
     .stderr("piped")
     .cwd("./compiler")
-    .noThrow();
+    .noThrow()
+    .printCommand();
 
   try {
     await fs.rm(dir, { recursive: true, force: true });

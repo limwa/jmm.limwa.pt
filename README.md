@@ -30,6 +30,7 @@ The following environment variables can be used to configure the website at runt
 
 - `APP_TITLE` - The title of the website. Defaults to "jmm compiler".
 - `APP_DESCRIPTION` - The description of the website. Defaults to "An application to compile Java-- code".
+- `ADMIN_CONTACT_INFO` - The contact information for the administrator. Used for when there is an internal server error in the compilation process.
 
 ## How to deploy
 
