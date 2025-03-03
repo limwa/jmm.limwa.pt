@@ -35,6 +35,8 @@ const internalServerError: ProtocolSection = {
     `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`,
 };
 
+const rawExtraArgs = process.env.JMM_EXTRA_ARGS ?? "";
+const extraArgs = extraArgs.split(":/:");
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
@@ -107,13 +109,10 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
   const inputFile = path.join(dir, "input.jmm");
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
-
-  const extraArgs = process.env.JMM_EXTRA_ARGS ?? "";
-  const splitExtraArgs = extraArgs.split(":/:");
   
   const args = [
     `-i=${inputFile}`,
-    ...splitExtraArgs,
+    ...extraArgs,
   ]
 
   if (optimizations) args.push("-o");
