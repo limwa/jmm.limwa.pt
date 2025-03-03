@@ -8,12 +8,11 @@ be able to run in the jmm compiler website.
 As a starting point, the compiler should be able to run the following command:
 
 ```bash
-./compiler/jmm/bin/jmm -d -o -r=0 -i=${inputFile}
+./compiler/jmm/bin/jmm -o -r=0 -i=${inputFile}
 ```
 
 This command will compile the input file and output the result to the standard output.
 
-- The `-d` flag will enable debug mode for the compiler.
 - The `-o` flag will enable all optimizations.
 - The `-r=0` flag will request register allocation is performed with the least amount of registers possible.
 - The `-i=${inputFile}` flag will specify the input file to be compiled.
