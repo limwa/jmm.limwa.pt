@@ -36,7 +36,7 @@ const internalServerError: ProtocolSection = {
 };
 
 const rawExtraArgs = process.env.JMM_EXTRA_ARGS ?? "";
-const extraArgs = rawExtraArgs.split(":/:");
+const extraArgs = rawExtraArgs.split(":/:").filter(v => !!v); // filter is used to remove empty args
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
