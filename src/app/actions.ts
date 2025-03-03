@@ -36,7 +36,7 @@ const internalServerError: ProtocolSection = {
 };
 
 const rawExtraArgs = process.env.JMM_EXTRA_ARGS ?? "";
-const extraArgs = extraArgs.split(":/:");
+const extraArgs = rawExtraArgs.split(":/:");
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
