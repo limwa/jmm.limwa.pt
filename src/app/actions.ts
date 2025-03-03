@@ -108,9 +108,12 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   const inputFile = path.join(dir, "input.jmm");
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
 
+  const extraArgs = process.env.JMM_EXTRA_ARGS ?? "";
+  const splitExtraArgs = extraArgs.split(":/:");
+  
   const args = [
-    "-d",
     `-i=${inputFile}`,
+    ...splitExtraArgs,
   ]
 
   if (optimizations) args.push("-o");
