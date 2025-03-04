@@ -2,18 +2,18 @@ ARG JMM_STRATEGY=copy
 FROM node:18-alpine AS base
 WORKDIR /app
 
-FROM base as copy
+FROM base AS copy
 
 COPY ./compiler compiler
 
-FROM base as download
+FROM base AS download
 
 ARG JMM_URL
 RUN wget ${JMM_URL} -O compiler.zip
 
 RUN unzip compiler.zip -d compiler
 
-FROM gradle:alpine as git
+FROM gradle:alpine AS git
 WORKDIR /app
 
 RUN apk add --no-cache git
@@ -34,18 +34,29 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml ./
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
 # Rebuild the source code only when needed
 FROM base AS builder
+
+COPY ./public ./public
+COPY ./src ./src
+COPY \
+  .eslintrc \
+  next-env.d.ts \
+  next.config.mjs \
+  postcss.config.mjs \
+  rsc.d.ts \
+  tailwind.config.ts \
+  tsconfig.json \
+  ./
+
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/package.json /app/pnpm-lock.yaml ./
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -53,9 +64,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
