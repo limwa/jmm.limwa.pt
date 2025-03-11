@@ -39,7 +39,7 @@ export function Inner({
   initialCode: string | null;
   initialRegisterAllocation: boolean | null;
   initialOptimizations: boolean | null;
-  lastUpdated: Date;
+  lastUpdated: Date | null;
 }) {
   const lg = useBreakpoint("lg");
 

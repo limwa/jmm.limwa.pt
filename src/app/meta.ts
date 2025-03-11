@@ -1,8 +1,12 @@
 import { stat } from 'fs/promises';
 
 async function getLastModified(path: string) {
-    const result = await stat(path);
-    return result.mtime;
+    try {
+        const result = await stat(path);
+        return result.mtime;
+    } catch (error) {
+        return null;
+    }
 }
 
 const entrypoint = './compiler/jmm/bin/jmm';
