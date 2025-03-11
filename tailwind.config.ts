@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 const config = {
   content: [
@@ -6,7 +7,7 @@ const config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "media",
-  plugins: [],
+  plugins: [animate],
 } satisfies Config;
 
 export default config;

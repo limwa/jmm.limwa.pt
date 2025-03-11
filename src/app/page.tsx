@@ -7,8 +7,9 @@ export const metadata: Metadata = {
 import type { Metadata } from "next";
 import { Inner } from "./inner";
 import { decode } from "@/lib/utils/base64";
+import { lastModified } from "./meta";
 
-export default function Home({
+export default async function Home({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
@@ -34,6 +35,7 @@ export default function Home({
       initialCode={noTabsCode}
       initialOptimizations={optimizations}
       initialRegisterAllocation={registerAllocation}
+      lastUpdated={await lastModified}
     />
   );
 }
