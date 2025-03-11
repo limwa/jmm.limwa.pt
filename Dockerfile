@@ -90,6 +90,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+ENV JMM_ENTRYPOINT=/app/compiler/jmm/bin/jmm
 COPY --from=strategy --chown=nextjs:nodejs /app/compiler /app/compiler
 
 USER nextjs

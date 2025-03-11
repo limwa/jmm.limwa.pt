@@ -4,6 +4,7 @@ import "server-only";
 import { $ } from "dax-sh";
 import fs from "fs/promises";
 import path from "path";
+import { entrypoint } from "./meta";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -118,7 +119,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
   if (optimizations) args.push("-o");
   if (registerAllocation) args.push("-r=0");
   
-  const process = await $`./jmm/bin/jmm ${args}`
+  const process = await $`${entrypoint} ${args}`
     .stdout("piped")
     .stderr("piped")
     .cwd("./compiler")

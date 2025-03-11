@@ -9,5 +9,5 @@ async function getLastModified(path: string) {
     }
 }
 
-const entrypoint = './compiler/jmm/bin/jmm';
+export const entrypoint = process.env.JMM_ENTRYPOINT ?? './compiler/jmm/bin/jmm';
 export const lastModified = getLastModified(entrypoint);
