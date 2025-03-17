@@ -1,11 +1,6 @@
 import Script from "next/script";
 
-export function CloudflareAnalytics() {
-    const token = process.env.CLOUDFLARE_ANALYTICS_TOKEN;
-    if (!token)
-        throw new Error("CLOUDFLARE_ANALYTICS_TOKEN is not set");
-    
-    console.log("hey")
+function CloudflareAnalytics({ token }: { token: string }) { 
     return (
         <Script
             defer
@@ -13,4 +8,11 @@ export function CloudflareAnalytics() {
             data-cf-beacon={`{"token": "${token}"}`}
         />
     )
+}
+
+export function CloudflareAnalyticsProvider({ token, children }: { token: string, children: React.ReactNode }) {
+    return <>
+        <CloudflareAnalytics token={token} />
+        {children}
+    </>
 }

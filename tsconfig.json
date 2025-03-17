@@ -12,6 +12,7 @@
     "verbatimModuleSyntax": true,
     "downlevelIteration": true,
     "isolatedModules": true,
+    "target": "ES2022",
     "jsx": "preserve",
     "incremental": true,
     "plugins": [

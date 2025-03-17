@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import { stat } from 'fs/promises';
 
 async function getLastModified(path: string) {
@@ -9,5 +10,5 @@ async function getLastModified(path: string) {
     }
 }
 
-export const entrypoint = process.env.JMM_ENTRYPOINT ?? './compiler/jmm/bin/jmm';
+export const entrypoint = env.JMM_ENTRYPOINT;
 export const lastModified = getLastModified(entrypoint);
