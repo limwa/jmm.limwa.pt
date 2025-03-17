@@ -25,7 +25,7 @@ const schema = z.intersection(
 
     JMM_ENTRYPOINT: z
       .string()
-      .default("./compiler/jmm/bin/jmm")
+      .default("./jmm/bin/jmm")
       .describe("The entrypoint for the compiler."),
 
     JMM_EXTRA_ARGS: z
@@ -57,6 +57,19 @@ const schema = z.intersection(
   ]),
 );
 
+
+export const env = validate({
+  JMM_EXTRA_ARGS: process.env.JMM_EXTRA_ARGS,
+  JMM_ENTRYPOINT: process.env.JMM_ENTRYPOINT,
+  ANALYTICS_PROVIDER: process.env.ANALYTICS_PROVIDER,
+  CLOUDFLARE_ANALYTICS_TOKEN: process.env.CLOUDFLARE_ANALYTICS_TOKEN,
+  APP_TITLE: process.env.APP_TITLE,
+  APP_DESCRIPTION: process.env.APP_DESCRIPTION,
+  ADMIN_CONTACT_INFO: process.env.ADMIN_CONTACT_INFO,
+});
+
+/* ##################################### */
+
 type UnionKeys<T> = T extends unknown ? keyof T : never;
 type EnvMap = Record<UnionKeys<z.input<typeof schema>>, string | undefined>;
 
@@ -81,13 +94,3 @@ function validate(obj: EnvMap) {
 
   return schema.parse(preprocessed);
 }
-
-export const env = validate({
-  JMM_EXTRA_ARGS: process.env.JMM_EXTRA_ARGS,
-  JMM_ENTRYPOINT: process.env.JMM_ENTRYPOINT,
-  ANALYTICS_PROVIDER: process.env.ANALYTICS_PROVIDER,
-  CLOUDFLARE_ANALYTICS_TOKEN: process.env.CLOUDFLARE_ANALYTICS_TOKEN,
-  APP_TITLE: process.env.APP_TITLE,
-  APP_DESCRIPTION: process.env.APP_DESCRIPTION,
-  ADMIN_CONTACT_INFO: process.env.ADMIN_CONTACT_INFO,
-});

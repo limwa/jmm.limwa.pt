@@ -1,9 +1,10 @@
 import { env } from '@/env';
 import { stat } from 'fs/promises';
+import { join } from 'path';
 
 async function getLastModified(path: string) {
     try {
-        const result = await stat(path);
+        const result = await stat(join("./compiler", path));
         return result.mtime;
     } catch (error) {
         return null;

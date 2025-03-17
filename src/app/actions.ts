@@ -5,6 +5,8 @@ import { $ } from "dax-sh";
 import fs from "fs/promises";
 import path from "path";
 import { entrypoint } from "./meta";
+import { env } from "@/env";
+import { cwd } from "process";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -26,7 +28,7 @@ export type ProtocolSection = {
   content: string;
 };
 
-const adminInfo = (process.env.ADMIN_CONTACT_INFO ?? "").replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "");
+const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? ""; 
 
 const internalServerError: ProtocolSection = {
   uuid: "internal-error",
@@ -36,8 +38,7 @@ const internalServerError: ProtocolSection = {
     `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`,
 };
 
-const rawExtraArgs = process.env.JMM_EXTRA_ARGS ?? "";
-const extraArgs = rawExtraArgs.split(":/:").filter(v => !!v); // filter is used to remove empty args
+const extraArgs = env.JMM_EXTRA_ARGS;
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);

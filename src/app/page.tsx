@@ -1,13 +1,13 @@
 export const metadata: Metadata = {
-  title: process.env.APP_TITLE ?? "jmm compiler",
-  description:
-    process.env.APP_DESCRIPTION ?? "An application to compile Java-- code",
+  title: env.APP_TITLE,
+  description: env.APP_DESCRIPTION,
 };
 
 import type { Metadata } from "next";
 import { Inner } from "./inner";
 import { decode } from "@/lib/utils/base64";
 import { lastModified } from "./meta";
+import { env } from "@/env";
 
 export default async function Home({
   searchParams,
