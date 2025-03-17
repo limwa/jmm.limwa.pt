@@ -24,7 +24,7 @@ RUN git clone --single-branch ${JMM_BRANCH:+--branch $JMM_BRANCH} ${JMM_URL} com
 
 RUN cd compiler_git && gradle installDist
 
-RUN mkdir -p compiler && cp -r compiler_git/config.properties compiler_git/build/install/jmm compiler/
+RUN mkdir -p compiler && cp -r compiler_git/config.properties compiler_git/libs-jmm compiler_git/build/install/jmm compiler/
 
 FROM ${JMM_STRATEGY} AS strategy
 
@@ -74,7 +74,7 @@ RUN \
 # Production image, copy all the files and run next
 FROM base AS runner
 
-RUN apk add --no-cache openjdk21-jre
+RUN apk add --no-cache openjdk21-jre bash
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
