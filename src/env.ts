@@ -57,7 +57,6 @@ const schema = z.intersection(
   ]),
 );
 
-
 export const env = validate({
   JMM_EXTRA_ARGS: process.env.JMM_EXTRA_ARGS,
   JMM_ENTRYPOINT: process.env.JMM_ENTRYPOINT,
