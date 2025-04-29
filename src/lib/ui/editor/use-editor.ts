@@ -7,16 +7,16 @@ type Highlighter = Awaited<ReturnType<typeof createHighlighter>>;
  * Imports the relevant libraries necessary for highlighting code.
  */
 async function createHighlighter() {
-  const { getHighlighterCore } = await import("shiki/core");
-  const getWasm = await import("shiki/wasm");
+  const { createHighlighterCore } = await import("shiki/core");
+  const { createOnigurumaEngine } = await import("shiki/engine-oniguruma.mjs");
 
-  return getHighlighterCore({
+  return createHighlighterCore({
     langs: [() => import("shiki/langs/java.mjs")],
     themes: [
       () => import("shiki/themes/github-dark-default.mjs"),
       () => import("shiki/themes/github-light-default.mjs"),
     ],
-    loadWasm: getWasm,
+    engine: createOnigurumaEngine(import("shiki/wasm")),
   });
 }
 

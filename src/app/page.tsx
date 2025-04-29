@@ -10,10 +10,11 @@ import { lastModified } from "./meta";
 import { env } from "@/env";
 
 export default async function Home({
-  searchParams,
+  searchParams: _searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const searchParams = await _searchParams;
   const code =
     typeof searchParams["code"] !== "string" ? null : searchParams["code"];
   const decodedCode = code !== null ? decode(code) : null;

@@ -1,14 +1,18 @@
 import "server-only";
 
-// import resolveConfig from "tailwindcss/resolveConfig";
-// import tailwindConfig from "../../../../../tailwind.config";
-
-// type ResolvedConfig = ReturnType<typeof resolveProjectConfig>;
-// 
-// export type Breakpoints = ResolvedConfig["theme"]["screens"];
-
+type ResolvedConfig = ReturnType<typeof resolveProjectConfig>;
+export type Breakpoints = ResolvedConfig["theme"]["screens"];
 
 export function resolveProjectConfig() {
-  return {}
-  // return resolveConfig(tailwindConfig);
+  return {
+    theme: {
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+      }
+    }
+  };
 }
