@@ -18,7 +18,7 @@ export function Highlight() {
           <textarea
             id="input"
             name="input"
-            className="absolute inset-0 size-full resize-none bg-transparent p-4 pl-[4rem] text-transparent caret-black outline-none selection:text-transparent dark:caret-white"
+            className="absolute inset-0 size-full resize-none bg-transparent p-4 pl-[4rem] text-transparent caret-black outline-hidden selection:text-transparent dark:caret-white"
             value={code}
             autoCapitalize="off"
             autoComplete="off"

@@ -54,7 +54,7 @@ export function Inner({
       <TooltipProvider delayDuration={100}>
         <main
           className={cn(
-            "grid h-dvh grid-cols-2 grid-rows-[max-content,1fr] gap-x-[0.15rem] bg-neutral-500 dark:bg-neutral-300",
+            "grid h-dvh grid-cols-2 grid-rows-[max-content_1fr] gap-x-[0.15rem] bg-neutral-500 dark:bg-neutral-300",
           )}
         >
           <Header
@@ -71,7 +71,7 @@ export function Inner({
           >
             <section
               className={
-                "col-span-2 grid grid-cols-1 grid-rows-[max-content,1fr] overflow-y-auto lg:col-span-1"
+                "col-span-2 grid grid-cols-1 grid-rows-[max-content_1fr] overflow-y-auto lg:col-span-1"
               }
             >
               {" "}
@@ -81,7 +81,7 @@ export function Inner({
                   <TabSelector
                     name="input"
                     readOnly={lg.loading || lg.active}
-                    className="data-[selected]:bg-neutral-100 dark:data-[selected]:bg-neutral-900"
+                    className="data-selected:bg-neutral-100 dark:data-selected:bg-neutral-900"
                   >
                     <h2>Input</h2>
                   </TabSelector>
@@ -89,7 +89,7 @@ export function Inner({
                 </nav>
               </div>
               <TabContent name="input">
-                <div className="grid grid-cols-1 grid-rows-[1fr,max-content] overflow-y-auto">
+                <div className="grid grid-cols-1 grid-rows-[1fr_max-content] overflow-y-auto">
                   <div className="overflow-y-auto bg-neutral-100 outline-2 -outline-offset-2 outline-teal-500 focus-visible:outline dark:bg-neutral-900 dark:outline-teal-300">
                     <Highlight />
                   </div>
@@ -104,7 +104,7 @@ export function Inner({
           </TabController>
           {lg.loading && (
             <TabController initialTab="loading">
-              <section className="hidden grid-cols-1 grid-rows-[max-content,1fr] overflow-y-auto lg:grid">
+              <section className="hidden grid-cols-1 grid-rows-[max-content_1fr] overflow-y-auto lg:grid">
                 <div className="overflow-x-auto">
                   <nav className="flex w-full lg:flex-wrap">
                     <TabSelector
@@ -122,7 +122,7 @@ export function Inner({
           )}
           {!lg.loading && lg.active && (
             <OutputTabController>
-              <section className="grid grid-cols-1 grid-rows-[max-content,1fr] overflow-y-auto">
+              <section className="grid grid-cols-1 grid-rows-[max-content_1fr] overflow-y-auto">
                 <div className="overflow-x-auto">
                   <nav className="flex w-full lg:flex-wrap">
                     <OutputTabSelectors />

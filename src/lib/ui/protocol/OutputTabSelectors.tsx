@@ -9,7 +9,7 @@ export function OutputTabSelectors() {
     <TabSelector
       key={section.uuid}
       name={section.name}
-      className="data-[selected]:bg-neutral-50 dark:data-[selected]:bg-neutral-950"
+      className="data-selected:bg-neutral-50 dark:data-selected:bg-neutral-950"
     >
       <div className="mx-auto flex w-max items-center gap-4">
         <h2>{section.name}</h2>
