@@ -1,5 +1,7 @@
 import { env } from "@/env";
 import type { Metadata } from "next";
+import { lastModified } from "../meta";
+import { Inner } from "./inner";
 
 export const metadata: Metadata = {
   title: env.APP_TITLE,
@@ -7,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default async function BugPage() {
-  return <div>Bug report page - under construction</div>;
+  return <Inner lastUpdated={await lastModified} />;
 }
