@@ -6,6 +6,7 @@ import fs from "fs/promises";
 import path from "path";
 import { entrypoint } from "./meta";
 import { env } from "@/env";
+import { encode } from "@/lib/utils/base64";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -32,7 +33,7 @@ const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)
 const extraArgs = env.JMM_EXTRA_ARGS;
 
 function newInternalServerError(message?: string): ProtocolSection {
-  const encryptedMessage = encodeURIComponent(btoa(message ?? ""));
+  const encryptedMessage = encodeURIComponent(encode(message ?? "") ?? "");
 
   return {
     uuid: "internal-error",
