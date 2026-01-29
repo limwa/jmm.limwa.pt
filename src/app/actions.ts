@@ -6,7 +6,6 @@ import fs from "fs/promises";
 import path from "path";
 import { entrypoint } from "./meta";
 import { env } from "@/env";
-import { cwd } from "process";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -33,13 +32,13 @@ const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)
 const extraArgs = env.JMM_EXTRA_ARGS;
 
 function newInternalServerError(message?: string): ProtocolSection {
-  const content = message ?? `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`;
+  const encryptedMessage = encodeURIComponent(btoa(message ?? ""));
 
   return {
     uuid: "internal-error",
     name: "Internal Error",
     status: "bad",
-    content: content,
+    content: `${env.JMM_BASE_URL}/bug?error=${encryptedMessage}`,
   };
 }
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { Header } from "@/lib/ui/header";
 import { TooltipProvider } from "@/lib/ui/tooltip";
 
@@ -13,7 +15,7 @@ export function Inner({
       <Header lastUpdated={lastUpdated}/>
       <section className="bg-neutral-50 text-black border-t-2 border-t-neutral-500 dark:bg-neutral-950 dark:text-white dark:border-t-neutral-300">
         <pre className="p-4 selection:bg-neutral-400/30">
-          {errorMessage}
+          {atob(errorMessage)}
         </pre>
       </section>
     </main>

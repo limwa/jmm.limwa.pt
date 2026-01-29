@@ -36,6 +36,11 @@ const schema = z.intersection(
       .describe(
         "Extra arguments passed to the compiler during compilation. Arguments must be separated using `:/:`. Example: `-d:/:--pretty`.",
       ),
+
+    JMM_BASE_URL: z
+      .string()
+      .default("http://localhost:3000")
+      .describe("The base URL for the JMM website."),
   }),
   z.discriminatedUnion("ANALYTICS_PROVIDER", [
     z.object({
@@ -66,6 +71,7 @@ export const env = validate({
   APP_TITLE: process.env.APP_TITLE,
   APP_DESCRIPTION: process.env.APP_DESCRIPTION,
   ADMIN_CONTACT_INFO: process.env.ADMIN_CONTACT_INFO,
+  JMM_BASE_URL: process.env.JMM_BASE_URL,
 });
 
 /* ##################################### */

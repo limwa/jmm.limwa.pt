@@ -2,7 +2,6 @@ import { env } from "@/env";
 import type { Metadata } from "next";
 import { lastModified } from "../meta";
 import { Inner } from "./inner";
-import { useSearchParams } from "next/navigation";
 
 export const metadata: Metadata = {
   title: env.APP_TITLE,
