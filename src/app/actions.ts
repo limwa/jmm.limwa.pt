@@ -28,17 +28,20 @@ export type ProtocolSection = {
   content: string;
 };
 
-const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? ""; 
-
-const internalServerError: ProtocolSection = {
-  uuid: "internal-error",
-  name: "Internal Error",
-  status: "bad",
-  content:
-    `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`,
-};
+const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? "";
 
 const extraArgs = env.JMM_EXTRA_ARGS;
+
+function newInternalServerError(message?: string): ProtocolSection {
+  const content = message ?? `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`;
+
+  return {
+    uuid: "internal-error",
+    name: "Internal Error",
+    status: "bad",
+    content: content,
+  };
+}
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
@@ -48,7 +51,7 @@ function parseOutput(output: string): ParsedOutput {
 
   const sectionMatches = match[0].matchAll(protocolRegex);
   const sections: ProtocolSection[] = [];
-  
+
   for (const sectionMatch of sectionMatches) {
     const { name, uuid, status, content } = sectionMatch.groups!;
 
@@ -111,7 +114,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
   const inputFile = path.join(dir, "input.jmm");
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
-  
+
   const args = [
     `-i=${inputFile}`,
     ...extraArgs,
@@ -119,7 +122,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
   if (optimizations) args.push("-o");
   if (registerAllocation) args.push("-r=0");
-  
+
   const process = await $`${entrypoint} ${args}`
     .stdout("piped")
     .stderr("piped")
@@ -138,12 +141,12 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
         stderr: process.stderr,
       });
 
-      return [internalServerError];
+      return [newInternalServerError(process.stderr)];
     }
 
     return output.sections;
   } catch (e) {
     console.error({ type: "Runtime Internal Error", stderr: e });
-    return [internalServerError];
+    return [newInternalServerError(String(e))];
   }
 }
