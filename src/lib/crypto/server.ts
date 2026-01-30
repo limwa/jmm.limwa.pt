@@ -45,7 +45,5 @@ export async function encrypt(plainText: string): Promise<string> {
   const ivBase64 = bytesToBase64(ivBytes);
   const encryptedBase64 = bytesToBase64(encryptedBytes);
 
-  console.log({ ivBase64, encryptedBase64 });
-
   return ivBase64 + ":" + encryptedBase64;
 }
