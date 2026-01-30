@@ -6,7 +6,7 @@ import fs from "fs/promises";
 import path from "path";
 import { entrypoint } from "./meta";
 import { env } from "@/env";
-import { encode } from "@/lib/utils/base64";
+import { encrypt } from "@/lib/crypto/server";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -32,8 +32,8 @@ const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)
 
 const extraArgs = env.JMM_EXTRA_ARGS;
 
-function newInternalServerError(message?: string): ProtocolSection {
-  const encryptedMessage = encodeURIComponent(encode(message ?? "") ?? "");
+async function newInternalServerError(message?: string): Promise<ProtocolSection> {
+  const encryptedMessage = encodeURIComponent(await encrypt(message ?? ""));
 
   return {
     uuid: "internal-error",
@@ -141,12 +141,12 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
         stderr: process.stderr,
       });
 
-      return [newInternalServerError(process.stderr)];
+      return [await newInternalServerError(process.stderr)];
     }
 
     return output.sections;
   } catch (e) {
     console.error({ type: "Runtime Internal Error", stderr: e });
-    return [newInternalServerError(String(e))];
+    return [await newInternalServerError(String(e))];
   }
 }

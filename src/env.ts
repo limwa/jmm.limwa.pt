@@ -37,10 +37,20 @@ const schema = z.intersection(
         "Extra arguments passed to the compiler during compilation. Arguments must be separated using `:/:`. Example: `-d:/:--pretty`.",
       ),
 
-    JMM_BASE_URL: z
+    JMM_BASE_URL: z  // TODO(Process-ing): change name
       .string()
       .default("http://localhost:3000")
       .describe("The base URL for the JMM website."),
+
+    ADMIN_ENCRYPTION_KEY_HEX: z
+      .string()
+      .default("5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8")  // for "password" password
+      .refine((val) => /^[0-9a-fA-F]{64}$/.test(val), {
+        message: "ADMIN_ENCRYPTION_KEY_HEX must be a 64-character hexadecimal string.",
+      })
+      .describe(
+        "The encryption key used to encrypt error messages shown to the administrator. Must be a SHA-256 hash, represented as a 64-character hexadecimal string.",
+      ),
   }),
   z.discriminatedUnion("ANALYTICS_PROVIDER", [
     z.object({
@@ -72,6 +82,7 @@ export const env = validate({
   APP_DESCRIPTION: process.env.APP_DESCRIPTION,
   ADMIN_CONTACT_INFO: process.env.ADMIN_CONTACT_INFO,
   JMM_BASE_URL: process.env.JMM_BASE_URL,
+  ADMIN_ENCRYPTION_KEY_HEX: process.env.ADMIN_ENCRYPTION_KEY_HEX,
 });
 
 /* ##################################### */

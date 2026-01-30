@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function BugPage({ searchParams }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Record<string, string | string[] | undefined>
 }) {
-  const errorMessage = typeof searchParams.error === "string" ? searchParams.error : "";
+  const errorMessage = typeof searchParams.error === "string" ? searchParams.error : null;
 
-  return <Inner errorMessage={errorMessage} lastUpdated={await lastModified} />;
+  return <Inner receivedMessage={errorMessage} lastUpdated={await lastModified} />;
 }
