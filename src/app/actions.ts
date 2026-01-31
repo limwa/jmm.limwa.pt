@@ -32,14 +32,23 @@ const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)
 
 const extraArgs = env.JMM_EXTRA_ARGS;
 
-async function newInternalServerError(message?: string): Promise<ProtocolSection> {
-  const encryptedMessage = encodeURIComponent(await encrypt(message ?? ""));
+async function genDebugLink(error: string): Promise<string> {
+  const encryptedMessage = encodeURIComponent(await encrypt(error));
+
+  return `${env.JMM_BASE_URL}/debug?error=${encryptedMessage}`;
+}
+
+async function newInternalServerError(error: string): Promise<ProtocolSection> {
+  const debugLink = await genDebugLink(error);
 
   return {
     uuid: "internal-error",
     name: "Internal Error",
     status: "bad",
-    content: `${env.JMM_BASE_URL}/debug?error=${encryptedMessage}`,
+    content:
+      "An unknown error occurred, please try again or contact an administrator" +
+      (adminInfo ? `\n\n${adminInfo}` : "") +
+      `\n\nShare this link with the administrator (triple click to select):\n${debugLink}`,
   };
 }
 
