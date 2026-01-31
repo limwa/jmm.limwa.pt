@@ -53,7 +53,7 @@ async function newInternalServerError(error: string): Promise<ProtocolSection> {
     name: "Internal Error",
     status: "bad",
     content:
-      "An unknown error occurred, please try again or contact an administrator" +
+      "An unknown error occurred, please try again or contact an administrator." +
       (adminInfo ? `\n\n${adminInfo}` : "") +
       `\n\nShare this link with the administrator (triple click to select):\n${debugLink}` +
       `\n\nOr share this QR code with the administrator:`,
