@@ -33,8 +33,15 @@ The following environment variables can be used to configure the website at runt
 - `ADMIN_CONTACT_INFO` - The contact information for the administrator. Used for when there is an internal server error in the compilation process.
 - `ANALYTICS_PROVIDER` - The analytics provider you are using. Only "cloudflare" is supported at this time.
   - `CLOUDFLARE_ANALYTICS_TOKEN` - The token for the Cloudflare analytics provider.
+- `JMM_ENTRYPOINT` - The entrypoint command for the compiler. Defaults to `./compiler/jmm/bin/jmm`.
 - `JMM_EXTRA_ARGS` - Extra arguments passed to the compiler during compilation. Arguments must be separated using `:/:`.
   - Example: `-d:/:--pretty`.
+- `WEBSITE_BASE_URL` - The base URL for the jmm website. Defaults to `http://localhost:3000`.
+- `ADMIN_ENCRYPTION_KEY_HEX` - A 32-byte hash used to encrypt sensitive information, which only the administrator can decrypt, using a particular password. To generate a key, use the following command:
+
+```bash
+pnpm gen-key <password>
+```
 
 ## How to deploy
 
