@@ -7,6 +7,7 @@ import path from "path";
 import { entrypoint } from "./meta";
 import { env } from "@/env";
 import { encrypt } from "@/lib/crypto/server";
+import QRCode from "qrcode";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -26,6 +27,7 @@ export type ProtocolSection = {
   name: string;
   status: "good" | "bad" | "pending";
   content: string;
+  imageData?: string;
 };
 
 const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? "";
@@ -41,6 +43,11 @@ async function genDebugLink(error: string): Promise<string> {
 async function newInternalServerError(error: string): Promise<ProtocolSection> {
   const debugLink = await genDebugLink(error);
 
+  const debugQRCode = await QRCode.toDataURL(debugLink, {
+    errorCorrectionLevel: "L",
+    margin: 1
+  });
+
   return {
     uuid: "internal-error",
     name: "Internal Error",
@@ -48,7 +55,9 @@ async function newInternalServerError(error: string): Promise<ProtocolSection> {
     content:
       "An unknown error occurred, please try again or contact an administrator" +
       (adminInfo ? `\n\n${adminInfo}` : "") +
-      `\n\nShare this link with the administrator (triple click to select):\n${debugLink}`,
+      `\n\nShare this link with the administrator (triple click to select):\n${debugLink}` +
+      `\n\nOr share this QR code with the administrator:`,
+    imageData: debugQRCode
   };
 }
 
