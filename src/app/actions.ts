@@ -39,7 +39,7 @@ async function newInternalServerError(message?: string): Promise<ProtocolSection
     uuid: "internal-error",
     name: "Internal Error",
     status: "bad",
-    content: `${env.JMM_BASE_URL}/bug?error=${encryptedMessage}`,
+    content: `${env.JMM_BASE_URL}/debug?error=${encryptedMessage}`,
   };
 }
 

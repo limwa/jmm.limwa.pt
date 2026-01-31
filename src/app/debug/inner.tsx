@@ -1,6 +1,6 @@
 "use client";
 
-import { ProtectedViewer } from "@/lib/ui/bug/protected-viewer";
+import { ProtectedViewer } from "@/lib/ui/debug/protected-viewer";
 import { Header } from "@/lib/ui/header";
 import { TooltipProvider } from "@/lib/ui/tooltip";
 

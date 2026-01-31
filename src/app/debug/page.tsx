@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: env.APP_DESCRIPTION,
 };
 
-export default async function BugPage({ searchParams }: {
+export default async function DebugPage({ searchParams }: {
   searchParams: Record<string, string | string[] | undefined>
 }) {
   const errorMessage = typeof searchParams.error === "string" ? searchParams.error : null;
