@@ -37,7 +37,7 @@ const extraArgs = env.JMM_EXTRA_ARGS;
 async function genDebugLink(error: string): Promise<string> {
   const encryptedMessage = encodeURIComponent(await encrypt(error));
 
-  return `${env.JMM_BASE_URL}/debug?error=${encryptedMessage}`;
+  return `${env.WEBSITE_BASE_URL}/debug?error=${encryptedMessage}`;
 }
 
 async function newInternalServerError(error: string): Promise<ProtocolSection> {
