@@ -43,8 +43,14 @@ export async function decrypt(
       encryptedBytes,
     );
 
+    const decompressor = new DecompressionStream("gzip");
+    const decompressedStream = new Response(
+      new Blob([decryptedBuffer]).stream().pipeThrough(decompressor),
+    );
+    const decompressedBuffer = await decompressedStream.arrayBuffer();
+
     const textDecoder = new TextDecoder();
-    return textDecoder.decode(decryptedBuffer);
+    return textDecoder.decode(decompressedBuffer);
 
   } catch (e) {  // Decryption failed, probably due to wrong password
     console.error("Decryption failed:", e);

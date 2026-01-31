@@ -33,6 +33,12 @@ export async function encrypt(plainText: string): Promise<string> {
   const textEncoder = new TextEncoder();
   const encodedText = textEncoder.encode(plainText);
 
+  const compressor = new CompressionStream("gzip");
+  const compressedStream = new Response(
+    new Blob([encodedText]).stream().pipeThrough(compressor),
+  );
+  const compressedBuffer = await compressedStream.arrayBuffer();
+
   const iv = crypto.randomBytes(12);
   const ivBytes = new Uint8Array(iv);
 
@@ -40,7 +46,7 @@ export async function encrypt(plainText: string): Promise<string> {
   const encryptedText = await crypto.subtle.encrypt(
     { name: ALGORITHM, iv: ivBytes },
     key,
-    encodedText,
+    compressedBuffer,
   );
   const encryptedBytes = new Uint8Array(encryptedText);
 
