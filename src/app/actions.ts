@@ -27,7 +27,7 @@ export type ProtocolSection = {
   name: string;
   status: "good" | "bad" | "pending";
   content: string;
-  imageData?: string;
+  imageData?: string;  // Optional field for image data at the bottom of the section (e.g., QR code)
 };
 
 const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? "";
