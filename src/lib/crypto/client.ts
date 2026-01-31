@@ -1,10 +1,11 @@
+"use client";
+
 import { base64ToBytes } from "../utils/base64";
 
 const ALGORITHM = "AES-GCM";
 
 async function keyFromPassword(password: string): Promise<CryptoKey> {
   const hashBuffer = await window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password));
-  console.log(Buffer.from(hashBuffer).toString("hex"));
 
   const key = await window.crypto.subtle.importKey(
     "raw",
@@ -26,8 +27,6 @@ export async function decrypt(
   if (!ivBase64 || !encryptedBase64) {
     return null;
   }
-
-  console.log({ ivBase64, encryptedBase64 });
 
   const ivBytes = base64ToBytes(ivBase64);
   const encryptedBytes = base64ToBytes(encryptedBase64);

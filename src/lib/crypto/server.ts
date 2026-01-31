@@ -1,3 +1,5 @@
+"use server";
+
 import { env } from "@/env";
 import crypto from "crypto";
 import { bytesToBase64 } from "../utils/base64";
@@ -39,7 +41,7 @@ export async function encrypt(plainText: string): Promise<string> {
     { name: ALGORITHM, iv: ivBytes },
     key,
     encodedText,
-  )
+  );
   const encryptedBytes = new Uint8Array(encryptedText);
 
   const ivBase64 = bytesToBase64(ivBytes);
