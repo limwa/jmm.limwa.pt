@@ -1,0 +1,44 @@
+{
+    "inputs": [
+        {
+            "name": "Java--",
+            "id": "jmm"
+        },
+        {
+            "name": "OLLIR",
+            "id": "ollir"
+        }
+    ],
+    "flags": [
+        {
+            "name": "Optimizations",
+            "id": "o",
+            "defaultState": "on",
+            "states": [
+                { "id": "on", "value": true },
+                { "id": "off", "value": false }
+            ],
+            "supportedIn": ["jmm"]
+        },
+        {
+            "name": "Register Allocation",
+            "id": "r",
+            "defaultState": "on",
+            "states": [
+                { "id": "on", "value": "0" },
+                { "id": "off", "value": "-1" }
+            ],
+            "supportedIn": ["jmm"]
+        },
+        {
+            "name": "Extra Features",
+            "id": "e",
+            "defaultState": "off",
+            "states": [
+                { "id": "on", "value": true },
+                { "id": "off", "value": false }
+            ],
+            "supportedIn": ["jmm", "ollir"]
+        }
+    ]
+}

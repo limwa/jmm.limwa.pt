@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^12.7.0",
+    "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-tooltip": "^1.2.4",
     "@uidotdev/usehooks": "^2.4.1",
     "client-only": "^0.0.1",

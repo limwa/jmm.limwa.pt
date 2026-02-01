@@ -1,38 +1,27 @@
 package pt.limwa.jmm.protocol;
 
+import pt.limwa.jmm.protocol.function.ThrowingConsumer;
+import pt.limwa.jmm.protocol.function.ThrowingFunction;
+import pt.limwa.jmm.protocol.function.ThrowingRunnable;
+import pt.limwa.jmm.protocol.function.ThrowingSupplier;
+
 import java.util.UUID;
 
-public class JmmProtocolAdapter {
+public class ProtocolAdapter {
 
-    public interface ThrowingRunnable<E extends Throwable> {
-        void run() throws E;
-    }
-
-    public interface ThrowingSupplier<T, E extends Throwable> {
-        T get() throws E;
-    }
-
-    public interface ThrowingConsumer<T, E extends Throwable> {
-        void accept(T t) throws E;
-    }
-
-    public interface ThrowingFunction<T, U, E extends Throwable> {
-        U apply(T t) throws E;
-    }
-
-    private JmmProtocolAdapter() {}
+    private ProtocolAdapter() {}
 
     private boolean inSection = false;
 
-    public static <E extends Throwable> void start(ThrowingConsumer<JmmProtocolAdapter, E> action) throws E {
+    public static <E extends Throwable> void start(ThrowingConsumer<ProtocolAdapter, E> action) throws E {
         start(adapter -> {
             action.accept(adapter);
             return null;
         });
     }
 
-    public static <U, E extends Throwable> U start(ThrowingFunction<JmmProtocolAdapter, U, E> action) throws E {
-        var adapter = new JmmProtocolAdapter();
+    public static <U, E extends Throwable> U start(ThrowingFunction<ProtocolAdapter, U, E> action) throws E {
+        var adapter = new ProtocolAdapter();
 
         System.out.println("<output>");
         try {
@@ -78,3 +67,4 @@ public class JmmProtocolAdapter {
         createSection(name, () -> System.out.println(content));
     }
 }
+

@@ -39,7 +39,7 @@ The footer is a single line that follows the format: `<endsection uuid="<UUID>" 
 
 ### Java Adapter
 
-There is a Java adapter available in [protocol/JmmProtocolAdapter.java](./protocol/JmmProtocolAdapter.java) that can be used to integrate the jmm protocol into your compiler.
+There is a Java adapter available in [java/protocol](./java/protocol) that can be used to integrate the jmm protocol into your compiler.
 
 This adapter will take care of creating the section headers and footers, as well as determining UUIDs and statuses for each section.
 
