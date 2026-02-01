@@ -77,8 +77,6 @@ function ViewerContent({
 }: {
   content: string;
 }) {
-
-
   return (
     <pre className="selection:bg-neutral-400/30">
       {content}
