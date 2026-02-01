@@ -6,7 +6,8 @@ import fs from "fs/promises";
 import path from "path";
 import { entrypoint } from "./meta";
 import { env } from "@/env";
-import { cwd } from "process";
+import { encrypt } from "@/lib/crypto/server";
+import QRCode from "qrcode";
 
 const outputRegex = /<output>(.|\n)*<endoutput>/;
 const protocolRegex =
@@ -26,19 +27,39 @@ export type ProtocolSection = {
   name: string;
   status: "good" | "bad" | "pending";
   content: string;
+  imageData?: string;  // Optional field for image data at the bottom of the section (e.g., QR code)
 };
 
-const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? ""; 
-
-const internalServerError: ProtocolSection = {
-  uuid: "internal-error",
-  name: "Internal Error",
-  status: "bad",
-  content:
-    `An unknown error occurred, please try again or contact an administrator.\n\n${adminInfo}`,
-};
+const adminInfo = env.ADMIN_CONTACT_INFO?.replaceAll(/^(?: *\n)+|(?<=\n) *(?=\n)|(?<=\n)(?: *\n)+$/g, "") ?? "";
 
 const extraArgs = env.JMM_EXTRA_ARGS;
+
+async function genDebugLink(error: string): Promise<string> {
+  const encryptedMessage = encodeURIComponent(await encrypt(error));
+
+  return `${env.WEBSITE_BASE_URL}/debug?error=${encryptedMessage}`;
+}
+
+async function newInternalServerError(error: string): Promise<ProtocolSection> {
+  const debugLink = await genDebugLink(error);
+
+  const debugQRCode = await QRCode.toDataURL(debugLink, {
+    errorCorrectionLevel: "L",
+    margin: 1
+  });
+
+  return {
+    uuid: "internal-error",
+    name: "Internal Error",
+    status: "bad",
+    content:
+      "An unknown error occurred, please try again or contact an administrator." +
+      (adminInfo ? `\n\n${adminInfo}` : "") +
+      `\n\nShare this link with the administrator (triple click to select):\n${debugLink}` +
+      `\n\nOr share this QR code with the administrator:`,
+    imageData: debugQRCode
+  };
+}
 
 function parseOutput(output: string): ParsedOutput {
   const match = output.match(outputRegex);
@@ -48,7 +69,7 @@ function parseOutput(output: string): ParsedOutput {
 
   const sectionMatches = match[0].matchAll(protocolRegex);
   const sections: ProtocolSection[] = [];
-  
+
   for (const sectionMatch of sectionMatches) {
     const { name, uuid, status, content } = sectionMatch.groups!;
 
@@ -111,7 +132,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
   const inputFile = path.join(dir, "input.jmm");
   await fs.writeFile(inputFile, code, { encoding: "utf-8" });
-  
+
   const args = [
     `-i=${inputFile}`,
     ...extraArgs,
@@ -119,7 +140,7 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
 
   if (optimizations) args.push("-o");
   if (registerAllocation) args.push("-r=0");
-  
+
   const process = await $`${entrypoint} ${args}`
     .stdout("piped")
     .stderr("piped")
@@ -138,12 +159,12 @@ export async function compileJmm(fd: FormData): Promise<ProtocolSection[]> {
         stderr: process.stderr,
       });
 
-      return [internalServerError];
+      return [await newInternalServerError(process.stderr)];
     }
 
     return output.sections;
   } catch (e) {
     console.error({ type: "Runtime Internal Error", stderr: e });
-    return [internalServerError];
+    return [await newInternalServerError(String(e))];
   }
 }

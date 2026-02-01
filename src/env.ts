@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const DEFAULT_ENCRYPTION_KEY =
+  "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8";
+
 const schema = z.intersection(
   z.object({
     APP_TITLE: z
@@ -36,12 +39,26 @@ const schema = z.intersection(
       .describe(
         "Extra arguments passed to the compiler during compilation. Arguments must be separated using `:/:`. Example: `-d:/:--pretty`.",
       ),
+
+    WEBSITE_BASE_URL: z
+      .string()
+      .default("http://localhost:3000")
+      .describe("The base URL for the JMM website."),
+
+    ADMIN_ENCRYPTION_KEY_HEX: z
+      .string()
+      .default(DEFAULT_ENCRYPTION_KEY) // for password "password"
+      .refine((val) => /^[0-9a-fA-F]{64}$/.test(val), {
+        message:
+          "ADMIN_ENCRYPTION_KEY_HEX must be a 64-character hexadecimal string.",
+      })
+      .describe(
+        "The encryption key used to encrypt error messages shown to the administrator. Must be a SHA-256 hash, represented as a 64-character hexadecimal string.",
+      ),
   }),
   z.discriminatedUnion("ANALYTICS_PROVIDER", [
     z.object({
-      ANALYTICS_PROVIDER: z
-        .undefined()
-        .describe("Do not use analytics.")
+      ANALYTICS_PROVIDER: z.undefined().describe("Do not use analytics."),
     }),
     z.object({
       ANALYTICS_PROVIDER: z
@@ -57,7 +74,6 @@ const schema = z.intersection(
   ]),
 );
 
-
 export const env = validate({
   JMM_EXTRA_ARGS: process.env.JMM_EXTRA_ARGS,
   JMM_ENTRYPOINT: process.env.JMM_ENTRYPOINT,
@@ -66,7 +82,19 @@ export const env = validate({
   APP_TITLE: process.env.APP_TITLE,
   APP_DESCRIPTION: process.env.APP_DESCRIPTION,
   ADMIN_CONTACT_INFO: process.env.ADMIN_CONTACT_INFO,
+  WEBSITE_BASE_URL: process.env.WEBSITE_BASE_URL,
+  ADMIN_ENCRYPTION_KEY_HEX: process.env.ADMIN_ENCRYPTION_KEY_HEX,
 });
+
+// Security check: warn if default encryption key is being used
+if (env.ADMIN_ENCRYPTION_KEY_HEX === DEFAULT_ENCRYPTION_KEY) {
+  console.warn(
+    "\nWARNING: Using default encryption key!\n" +
+      "   This is insecure for production environments.\n" +
+      "   Generate a new key with: pnpm gen-key <your-password>\n" +
+      "   Then set ADMIN_ENCRYPTION_KEY_HEX in your .env file.\n",
+  );
+}
 
 /* ##################################### */
 
