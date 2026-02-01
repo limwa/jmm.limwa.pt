@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const DEFAULT_ENCRYPTION_KEY =
+  "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8";
+
 const schema = z.intersection(
   z.object({
     APP_TITLE: z
@@ -44,9 +47,7 @@ const schema = z.intersection(
 
     ADMIN_ENCRYPTION_KEY_HEX: z
       .string()
-      .default(
-        "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-      ) // for "password" password
+      .default(DEFAULT_ENCRYPTION_KEY) // for password "password"
       .refine((val) => /^[0-9a-fA-F]{64}$/.test(val), {
         message:
           "ADMIN_ENCRYPTION_KEY_HEX must be a 64-character hexadecimal string.",
@@ -84,6 +85,16 @@ export const env = validate({
   WEBSITE_BASE_URL: process.env.WEBSITE_BASE_URL,
   ADMIN_ENCRYPTION_KEY_HEX: process.env.ADMIN_ENCRYPTION_KEY_HEX,
 });
+
+// Security check: warn if default encryption key is being used
+if (env.ADMIN_ENCRYPTION_KEY_HEX === DEFAULT_ENCRYPTION_KEY) {
+  console.warn(
+    "\nWARNING: Using default encryption key!\n" +
+      "   This is insecure for production environments.\n" +
+      "   Generate a new key with: pnpm gen-key <your-password>\n" +
+      "   Then set ADMIN_ENCRYPTION_KEY_HEX in your .env file.\n",
+  );
+}
 
 /* ##################################### */
 
